@@ -1,22 +1,39 @@
 import csv
-
 def read_preferences(pref_file_path):
     preferences = {}
     with open(pref_file_path, 'r', encoding='utf-8') as pref_file:
+        mode = None
         for line in pref_file:
             stripped_line = line.strip()
-            if stripped_line and not stripped_line.startswith('//'):
+            if stripped_line.startswith('default:{'):
+                mode = 'default'
+                continue
+            elif stripped_line.startswith('user:{'):
+                mode = 'user'
+                continue
+            elif stripped_line == '}':
+                mode = None
+                continue
+            if mode and stripped_line and not stripped_line.startswith('//'):
                 key, value = stripped_line.split(':')
                 preferences[key.strip()] = value.strip().rstrip(';')
     return preferences
-
 def csv_to_html(csv_file_path, html_file_path, preferences):
-    top_row_color = preferences.get("top_row_color", "#F8D566")
-    top_column_color = preferences.get("top_column_color", "#E4E2DF")
-    alt_color_1 = preferences.get("alt_color_1", "#FFFBF0")
-    alt_color_2 = preferences.get("alt_color_2", "#EFEBE3")
-    background_color = preferences.get("background_color", "#FFFBF0")
-    cell_font_name = preferences.get("cell_font_name", "Avenir Next")
+    default_preferences = {
+        "top_row_color": "#F8D566",
+        "top_column_color": "#E4E2DF",
+        "alt_color_1": "#FFFBF0",
+        "alt_color_2": "#EFEBE3",
+        "background_color": "#FFFBF0",
+        "cell_font_name": "Avenir Next"
+    }
+
+    top_row_color = preferences.get("top_row_color", default_preferences["top_row_color"])
+    top_column_color = preferences.get("top_column_color", default_preferences["top_column_color"])
+    alt_color_1 = preferences.get("alt_color_1", default_preferences["alt_color_1"])
+    alt_color_2 = preferences.get("alt_color_2", default_preferences["alt_color_2"])
+    background_color = preferences.get("background_color", default_preferences["background_color"])
+    cell_font_name = preferences.get("cell_font_name", default_preferences["cell_font_name"])
 
     with open(csv_file_path, mode='r', newline='', encoding='utf-8') as csvfile:
         reader = csv.reader(csvfile)
