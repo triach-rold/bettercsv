@@ -4,8 +4,9 @@ def read_preferences(pref_file_path):
     preferences = {}
     with open(pref_file_path, 'r', encoding='utf-8') as pref_file:
         for line in pref_file:
-            if line.strip():
-                key, value = line.split(':')
+            stripped_line = line.strip()
+            if stripped_line and not stripped_line.startswith('//'):
+                key, value = stripped_line.split(':')
                 preferences[key.strip()] = value.strip().rstrip(';')
     return preferences
 
