@@ -1,12 +1,21 @@
 import csv
 
-def csv_to_html(csv_file_path, html_file_path):
-    top_row_color = "#F8D566"
-    top_column_color = "#E4E2DF"
-    alt_color_1 = "#FFFBF0"
-    alt_color_2 = "#EFEBE3"
-    background_color = "#FFFBF0"
-    cell_font_name = "Avenir Next"
+def read_preferences(pref_file_path):
+    preferences = {}
+    with open(pref_file_path, 'r', encoding='utf-8') as pref_file:
+        for line in pref_file:
+            if line.strip():
+                key, value = line.split(':')
+                preferences[key.strip()] = value.strip().rstrip(';')
+    return preferences
+
+def csv_to_html(csv_file_path, html_file_path, preferences):
+    top_row_color = preferences.get("top_row_color", "#F8D566")
+    top_column_color = preferences.get("top_column_color", "#E4E2DF")
+    alt_color_1 = preferences.get("alt_color_1", "#FFFBF0")
+    alt_color_2 = preferences.get("alt_color_2", "#EFEBE3")
+    background_color = preferences.get("background_color", "#FFFBF0")
+    cell_font_name = preferences.get("cell_font_name", "Avenir Next")
 
     with open(csv_file_path, mode='r', newline='', encoding='utf-8') as csvfile:
         reader = csv.reader(csvfile)
@@ -82,6 +91,8 @@ def csv_to_html(csv_file_path, html_file_path):
     with open(html_file_path, mode='w', encoding='utf-8') as htmlfile:
         htmlfile.write(html_content)
 
+pref_file_path = 'pref.txt'
 csv_file_path = 'example.csv'
 html_file_path = 'output.html'
-csv_to_html(csv_file_path, html_file_path)
+preferences = read_preferences(pref_file_path)
+csv_to_html(csv_file_path, html_file_path, preferences)
