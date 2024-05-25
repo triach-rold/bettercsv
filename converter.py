@@ -1,43 +1,54 @@
 import csv
+
 def csv_to_html(csv_file_path, html_file_path):
+    top_row_color = "#F8D566"
+    top_column_color = "#E4E2DF"
+    alt_color_1 = "#FFFBF0"
+    alt_color_2 = "#EFEBE3"
+    background_color = "#FFFBF0"
+    cell_font_name = "Avenir Next"
+
     with open(csv_file_path, mode='r', newline='', encoding='utf-8') as csvfile:
         reader = csv.reader(csvfile)
         headers = next(reader)
-        html_content = '''
+        html_content = f'''
         <html lang="en">
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>CSV to HTML</title>
             <style>
-                body {
-                    background-color: #FFFBF0;
-                    font-family: 'Avenir Next', sans-serif;
-                }
-                table {
+                body {{
+                    background-color: {background_color};
+                    font-family: '{cell_font_name}', sans-serif;
+                }}
+                table {{
                     width: 100%;
                     border-collapse: collapse;
-                }
-                th, td {
+                }}
+                th, td {{
                     border: 1px solid black;
                     padding: 8px;
                     text-align: left;
-                }
-                tr:nth-child(1) td {
-                    background-color: #FFFBF0;
-                }
-                tr:nth-child(2) td {
-                    background-color: #EFEBE3;
-                }
-                tr:first-child {
-                    background-color: #F8D566;
-                }
-                tr:nth-child(2n+4) {
-                    background-color: #EFEBE3;
-                }
-                tr:nth-child(2n+3) {
-                    background-color: #FFFBF0;
-                }
+                }}
+                tr:nth-child(1) td {{
+                    background-color: {alt_color_1};
+                }}
+                tr:nth-child(2) td {{
+                    background-color: {alt_color_2};
+                }}
+                tr:first-child {{
+                    background-color: {top_row_color};
+                }}
+                tr:nth-child(2n+4) {{
+                    background-color: {alt_color_2};
+                }}
+                tr:nth-child(2n+3) {{
+                    background-color: {alt_color_1};
+                }}
+                td:first-child {{
+                    background-color: {top_column_color};
+                }}
             </style>
         </head>
         <body>
@@ -58,7 +69,7 @@ def csv_to_html(csv_file_path, html_file_path):
             html_content += '<tr>'
             for column_index, column in enumerate(row):
                 if column_index == 0:
-                    html_content += f'<td style="background-color:#E4E2DF">{column}</td>'
+                    html_content += f'<td style="background-color:{top_column_color}">{column}</td>'
                 else:
                     html_content += f'<td>{column}</td>'
             html_content += '</tr>'
@@ -70,6 +81,7 @@ def csv_to_html(csv_file_path, html_file_path):
         '''
     with open(html_file_path, mode='w', encoding='utf-8') as htmlfile:
         htmlfile.write(html_content)
+
 csv_file_path = 'example.csv'
 html_file_path = 'output.html'
 csv_to_html(csv_file_path, html_file_path)
