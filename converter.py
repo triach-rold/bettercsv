@@ -36,7 +36,7 @@ def read_preferences(pref_file_path):
                     preferences[key.strip()] = value.strip().rstrip(';')
     return preferences, color_themes
 
-def csv_to_html(csv_file_path, html_file_path, preferences):
+def csv_to_html(csv_file_path, html_file_path, preferences, color_themes):
     default_preferences = {
         "top_row_color": "#F8D566",
         "top_column_color": "#E4E2DF",
@@ -48,10 +48,16 @@ def csv_to_html(csv_file_path, html_file_path, preferences):
         "border_thickness": "1px",
         "border_color": "black",
         "title": "true",
-        "title_text":"CSV Data",
-        "title_color":"black"
+        "title_text": "CSV Data",
+        "title_color": "black"
     }
-    settings = {**default_preferences, **preferences}
+
+    selected_theme = preferences.get("colortheme", None)
+    if selected_theme and selected_theme in color_themes:
+        theme_preferences = color_themes[selected_theme]
+        settings = {**default_preferences, **theme_preferences, **preferences}
+    else:
+        settings = {**default_preferences, **preferences}
 
     top_row_color = settings["top_row_color"]
     top_column_color = settings["top_column_color"]
@@ -66,9 +72,8 @@ def csv_to_html(csv_file_path, html_file_path, preferences):
     title_text = settings["title_text"]
     title_color = settings["title_color"]
 
-    if title_text=="":
+    if title_text == "":
         title_text = "CSV Data"
-
 
     if anti_alternating:
         alt_color_1, alt_color_2 = alt_color_2, alt_color_1
@@ -83,9 +88,9 @@ def csv_to_html(csv_file_path, html_file_path, preferences):
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>CSV to HTML</title>
             <style>
-                h1{{
+                h1 {{
                     text-align: center;
-                    color:{title_color};
+                    color: {title_color};
                 }}
                 body {{
                     background-color: {background_color};
@@ -153,5 +158,5 @@ def csv_to_html(csv_file_path, html_file_path, preferences):
 pref_file_path = 'pref.txt'
 csv_file_path = 'example.csv'
 html_file_path = 'output.html'
-preferences = read_preferences(pref_file_path)
-csv_to_html(csv_file_path, html_file_path, preferences)
+preferences, color_themes = read_preferences(pref_file_path)
+csv_to_html(csv_file_path, html_file_path, preferences, color_themes)
