@@ -69,6 +69,7 @@ def csv_to_html(csv_file_path, html_file_path, preferences):
             <style>
                 h1{{
                     text-align: center;
+                    color:{title_color};
                 }}
                 body {{
                     background-color: {background_color};
