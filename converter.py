@@ -2,10 +2,8 @@ import csv
 
 def read_preferences(pref_file_path):
     preferences = {}
-    color_themes = {}
     with open(pref_file_path, 'r', encoding='utf-8') as pref_file:
         mode = None
-        current_theme = None
         for line in pref_file:
             stripped_line = line.strip()
             if stripped_line.startswith('default:{'):
@@ -14,29 +12,15 @@ def read_preferences(pref_file_path):
             elif stripped_line.startswith('user:{'):
                 mode = 'user'
                 continue
-            elif stripped_line.startswith('colortheme:{'):
-                mode = 'colortheme'
-                continue
-            elif mode == 'colortheme' and stripped_line.startswith('}'):
-                mode = None
-                current_theme = None
-                continue
-            elif mode == 'colortheme' and stripped_line.endswith(':{'):
-                current_theme = stripped_line[:-2]
-                color_themes[current_theme] = {}
-                continue
             elif stripped_line == '}':
                 mode = None
                 continue
             if mode and stripped_line and not stripped_line.startswith('//'):
                 key, value = stripped_line.split(':')
-                if mode == 'colortheme' and current_theme:
-                    color_themes[current_theme][key.strip()] = value.strip().rstrip(';')
-                else:
-                    preferences[key.strip()] = value.strip().rstrip(';')
-    return preferences, color_themes
+                preferences[key.strip()] = value.strip().rstrip(';')
+    return preferences
 
-def csv_to_html(csv_file_path, html_file_path, preferences, color_themes):
+def csv_to_html(csv_file_path, html_file_path, preferences):
     default_preferences = {
         "top_row_color": "#F8D566",
         "top_column_color": "#E4E2DF",
@@ -44,6 +28,7 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes):
         "alt_color_2": "#EFEBE3",
         "background_color": "#FFFBF0",
         "cell_font_name": "Avenir Next",
+        "cell_text_color": "black",
         "anti_alternating": "false",
         "border_thickness": "1px",
         "border_color": "black",
@@ -51,13 +36,46 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes):
         "title_text": "CSV Data",
         "title_color": "black"
     }
+    
+    color_themes = {
+        "dracula": {
+            "top_row_color": "#282A36",
+            "top_column_color": "#282A36",
+            "alt_color_1": "#6272A4",
+            "alt_color_2": "#44475A",
+            "background_color": "#282A36",
+            "border_color": "#8BE9FD",
+            "title_color": "#F8F8F2",
+            "cell_text_color": "#F8F8F2"
+        },
+        "light": {
+            "top_row_color": "#E0E0E0",
+            "top_column_color": "#FFFFFF",
+            "alt_color_1": "#F0F0F0",
+            "alt_color_2": "#FFFFFF",
+            "background_color": "#FFFFFF",
+            "border_color": "#CCCCCC",
+            "title_color": "#000000",
+            "cell_text_color": "#000000"
+        },
+        "solarized": {
+            "top_row_color": "#002B36",
+            "top_column_color": "#073642",
+            "alt_color_1": "#586e75",
+            "alt_color_2": "#657b83",
+            "background_color": "#FDF6E3",
+            "border_color": "#93A1A1",
+            "title_color": "#657B83",
+            "cell_text_color": "#FDF6E3"
+        }
+    }
 
-    selected_theme = preferences.get("colortheme", None)
+    settings = {**default_preferences, **preferences}
+
+    selected_theme = settings.get("colortheme")
     if selected_theme and selected_theme in color_themes:
-        theme_preferences = color_themes[selected_theme]
-        settings = {**default_preferences, **theme_preferences, **preferences}
-    else:
-        settings = {**default_preferences, **preferences}
+        theme_settings = color_themes[selected_theme]
+        settings = {**settings, **theme_settings}
 
     top_row_color = settings["top_row_color"]
     top_column_color = settings["top_column_color"]
@@ -65,6 +83,7 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes):
     alt_color_2 = settings["alt_color_2"]
     background_color = settings["background_color"]
     cell_font_name = settings["cell_font_name"]
+    cell_text_color = settings["cell_text_color"]
     border_color = settings["border_color"]
     border_thickness = settings["border_thickness"]
     anti_alternating = settings["anti_alternating"].lower() == "true"
@@ -84,8 +103,6 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes):
         html_content = f'''
         <html lang="en">
         <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>CSV to HTML</title>
             <style>
                 h1 {{
@@ -101,6 +118,7 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes):
                     border-collapse: collapse;
                 }}
                 th, td {{
+                    color: {cell_text_color};
                     border: {border_thickness} solid {border_color};
                     padding: 8px;
                     text-align: left;
@@ -158,5 +176,5 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes):
 pref_file_path = 'pref.txt'
 csv_file_path = 'example.csv'
 html_file_path = 'output.html'
-preferences, color_themes = read_preferences(pref_file_path)
-csv_to_html(csv_file_path, html_file_path, preferences, color_themes)
+preferences = read_preferences(pref_file_path)
+csv_to_html(csv_file_path, html_file_path, preferences)
