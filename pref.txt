@@ -13,4 +13,5 @@ default:{
     title_color: black;
 }
 user:{
+    colortheme : tokyo-night;
 }
