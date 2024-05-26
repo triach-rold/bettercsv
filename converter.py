@@ -107,8 +107,59 @@ def csv_to_html(csv_file_path, html_file_path, preferences):
         "border_color": "#C0CAF5",
         "title_color": "#C0CAF5",
         "cell_text_color": "#C0CAF5"
+    },
+    "oceanic-next": {
+        "top_row_color": "#1B2B34",
+        "top_column_color": "#343D46",
+        "alt_color_1": "#4F5B66",
+        "alt_color_2": "#65737E",
+        "background_color": "#1B2B34",
+        "border_color": "#A7ADBA",
+        "title_color": "#C0C5CE",
+        "cell_text_color": "#C0C5CE"
+    },
+    "palenight": {
+        "top_row_color": "#292D3E",
+        "top_column_color": "#444267",
+        "alt_color_1": "#32374D",
+        "alt_color_2": "#464B5D",
+        "background_color": "#292D3E",
+        "border_color": "#959DCB",
+        "title_color": "#959DCB",
+        "cell_text_color": "#959DCB"
+    },
+    "ayu-mirage": {
+        "top_row_color": "#17191E",
+        "top_column_color": "#242B38",
+        "alt_color_1": "#1F2430",
+        "alt_color_2": "#343D46",
+        "background_color": "#17191E",
+        "border_color": "#6C7680",
+        "title_color": "#D9D7CE",
+        "cell_text_color": "#D9D7CE"
+    },
+    "material": {
+        "top_row_color": "#263238",
+        "top_column_color": "#37474F",
+        "alt_color_1": "#455A64",
+        "alt_color_2": "#546E7A",
+        "background_color": "#263238",
+        "border_color": "#B0BEC5",
+        "title_color": "#ECEFF1",
+        "cell_text_color": "#ECEFF1"
+    },
+    "tomorrow-night": {
+        "top_row_color": "#1D1F21",
+        "top_column_color": "#282A2E",
+        "alt_color_1": "#373B41",
+        "alt_color_2": "#4D4D4C",
+        "background_color": "#1D1F21",
+        "border_color": "#C5C8C6",
+        "title_color": "#C5C8C6",
+        "cell_text_color": "#C5C8C6"
     }
 }
+
 
 
     settings = {**default_preferences, **preferences}
