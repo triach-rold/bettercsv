@@ -1,5 +1,54 @@
+default:{
+    top_row_color: #F8D566;
+    top_column_color: #E4E2DF;
+    alt_color_1: #FFFBF0;
+    alt_color_2: #EFEBE3;
+    background_color: #FFFBF0;
+    cell_font_name: Avenir Next;
+    anti_alternating: false;
+    border_thickness: 1px;
+    border_color: black;
+    title: true;
+    title_text: CSV Data;
+    title_color: black;
+}
 user:{
-anti_alternating:false;
-title_text: Test CSV;
-title_color:black;
+    top_row_color: #FFD700;
+    top_column_color: #D3D3D3;
+    alt_color_1: #FAFAD2;
+    alt_color_2: #FFEFD5;
+    background_color: #FFFACD;
+    cell_font_name: Arial;
+    anti_alternating: false;
+    border_thickness: 1px;
+    border_color: black;
+    title: true;
+    title_text: User Data;
+    title_color: black;
+}
+colortheme:{
+    dracula:{
+        top_row_color: #44475a;
+        top_column_color: #6272a4;
+        alt_color_1: #282a36;
+        alt_color_2: #44475a;
+        background_color: #282a36;
+        cell_font_name: Arial;
+        anti_alternating: false;
+        border_thickness: 1px;
+        border_color: #50fa7b;
+        title_color: #f8f8f2;
+    }
+    light:{
+        top_row_color: #d3d3d3;
+        top_column_color: #f0f0f0;
+        alt_color_1: #ffffff;
+        alt_color_2: #f9f9f9;
+        background_color: #ffffff;
+        cell_font_name: Arial;
+        anti_alternating: false;
+        border_thickness: 1px;
+        border_color: #000000;
+        title_color: #000000;
+    }
 }
