@@ -2,8 +2,10 @@ import csv
 
 def read_preferences(pref_file_path):
     preferences = {}
+    color_themes = {}
     with open(pref_file_path, 'r', encoding='utf-8') as pref_file:
         mode = None
+        current_theme = None
         for line in pref_file:
             stripped_line = line.strip()
             if stripped_line.startswith('default:{'):
@@ -12,13 +14,27 @@ def read_preferences(pref_file_path):
             elif stripped_line.startswith('user:{'):
                 mode = 'user'
                 continue
+            elif stripped_line.startswith('colortheme:{'):
+                mode = 'colortheme'
+                continue
+            elif mode == 'colortheme' and stripped_line.startswith('}'):
+                mode = None
+                current_theme = None
+                continue
+            elif mode == 'colortheme' and stripped_line.endswith(':{'):
+                current_theme = stripped_line[:-2]
+                color_themes[current_theme] = {}
+                continue
             elif stripped_line == '}':
                 mode = None
                 continue
             if mode and stripped_line and not stripped_line.startswith('//'):
                 key, value = stripped_line.split(':')
-                preferences[key.strip()] = value.strip().rstrip(';')
-    return preferences
+                if mode == 'colortheme' and current_theme:
+                    color_themes[current_theme][key.strip()] = value.strip().rstrip(';')
+                else:
+                    preferences[key.strip()] = value.strip().rstrip(';')
+    return preferences, color_themes
 
 def csv_to_html(csv_file_path, html_file_path, preferences):
     default_preferences = {
