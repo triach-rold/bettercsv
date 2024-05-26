@@ -25,24 +25,32 @@ def csv_to_html(csv_file_path, html_file_path, preferences):
         "alt_color_1": "#FFFBF0",
         "alt_color_2": "#EFEBE3",
         "background_color": "#FFFBF0",
-        "cell_font_name": "Avenir Next"
+        "cell_font_name": "Avenir Next",
+        "anti_alternating":"false",
+        "border_thickness": "1px",
+        "border_color":"black"
     }
-
     top_row_color = preferences.get("top_row_color", default_preferences["top_row_color"])
     top_column_color = preferences.get("top_column_color", default_preferences["top_column_color"])
     alt_color_1 = preferences.get("alt_color_1", default_preferences["alt_color_1"])
     alt_color_2 = preferences.get("alt_color_2", default_preferences["alt_color_2"])
     background_color = preferences.get("background_color", default_preferences["background_color"])
     cell_font_name = preferences.get("cell_font_name", default_preferences["cell_font_name"])
-
+    border_color =  preferences.get("border_color", default_preferences["border_color"])
+    border_thickness =  preferences.get("border_thickness", default_preferences["border_thickness"])
+    
+    flag_anti_alternating = preferences.get("anti_alternating", default_preferences["anti_alternating"])
+    if(flag_anti_alternating=="true"):
+        temp = alt_color_2;
+        alt_color_2 = alt_color_1;
+        alt_color_1 = temp;
+    
     with open(csv_file_path, mode='r', newline='', encoding='utf-8') as csvfile:
         reader = csv.reader(csvfile)
         headers = next(reader)
         html_content = f'''
         <html lang="en">
         <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>CSV to HTML</title>
             <style>
                 body {{
@@ -54,7 +62,7 @@ def csv_to_html(csv_file_path, html_file_path, preferences):
                     border-collapse: collapse;
                 }}
                 th, td {{
-                    border: 1px solid black;
+                    border: {border_thickness} solid {border_color};
                     padding: 8px;
                     text-align: left;
                 }}
