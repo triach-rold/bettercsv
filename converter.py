@@ -1,4 +1,5 @@
 import csv
+
 def read_preferences(pref_file_path):
     preferences = {}
     with open(pref_file_path, 'r', encoding='utf-8') as pref_file:
@@ -18,6 +19,7 @@ def read_preferences(pref_file_path):
                 key, value = stripped_line.split(':')
                 preferences[key.strip()] = value.strip().rstrip(';')
     return preferences
+
 def csv_to_html(csv_file_path, html_file_path, preferences):
     default_preferences = {
         "top_row_color": "#F8D566",
@@ -26,33 +28,48 @@ def csv_to_html(csv_file_path, html_file_path, preferences):
         "alt_color_2": "#EFEBE3",
         "background_color": "#FFFBF0",
         "cell_font_name": "Avenir Next",
-        "anti_alternating":"false",
+        "anti_alternating": "false",
         "border_thickness": "1px",
-        "border_color":"black"
+        "border_color": "black",
+        "title": "true",
+        "title_text":"CSV Data",
+        "title_color":"black"
     }
-    top_row_color = preferences.get("top_row_color", default_preferences["top_row_color"])
-    top_column_color = preferences.get("top_column_color", default_preferences["top_column_color"])
-    alt_color_1 = preferences.get("alt_color_1", default_preferences["alt_color_1"])
-    alt_color_2 = preferences.get("alt_color_2", default_preferences["alt_color_2"])
-    background_color = preferences.get("background_color", default_preferences["background_color"])
-    cell_font_name = preferences.get("cell_font_name", default_preferences["cell_font_name"])
-    border_color =  preferences.get("border_color", default_preferences["border_color"])
-    border_thickness =  preferences.get("border_thickness", default_preferences["border_thickness"])
-    
-    flag_anti_alternating = preferences.get("anti_alternating", default_preferences["anti_alternating"])
-    if(flag_anti_alternating=="true"):
-        temp = alt_color_2;
-        alt_color_2 = alt_color_1;
-        alt_color_1 = temp;
-    
+    settings = {**default_preferences, **preferences}
+
+    top_row_color = settings["top_row_color"]
+    top_column_color = settings["top_column_color"]
+    alt_color_1 = settings["alt_color_1"]
+    alt_color_2 = settings["alt_color_2"]
+    background_color = settings["background_color"]
+    cell_font_name = settings["cell_font_name"]
+    border_color = settings["border_color"]
+    border_thickness = settings["border_thickness"]
+    anti_alternating = settings["anti_alternating"].lower() == "true"
+    title_flag = settings["title"].lower() == "true"
+    title_text = settings["title_text"]
+    title_color = settings["title_color"]
+
+    if title_text=="":
+        title_text = "CSV Data"
+
+
+    if anti_alternating:
+        alt_color_1, alt_color_2 = alt_color_2, alt_color_1
+
     with open(csv_file_path, mode='r', newline='', encoding='utf-8') as csvfile:
         reader = csv.reader(csvfile)
         headers = next(reader)
         html_content = f'''
         <html lang="en">
         <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>CSV to HTML</title>
             <style>
+                h1{{
+                    text-align: center;
+                }}
                 body {{
                     background-color: {background_color};
                     font-family: '{cell_font_name}', sans-serif;
@@ -66,27 +83,26 @@ def csv_to_html(csv_file_path, html_file_path, preferences):
                     padding: 8px;
                     text-align: left;
                 }}
-                tr:nth-child(1) td {{
-                    background-color: {alt_color_1};
-                }}
-                tr:nth-child(2) td {{
-                    background-color: {alt_color_2};
-                }}
                 tr:first-child {{
                     background-color: {top_row_color};
-                }}
-                tr:nth-child(2n+4) {{
-                    background-color: {alt_color_2};
-                }}
-                tr:nth-child(2n+3) {{
-                    background-color: {alt_color_1};
                 }}
                 td:first-child {{
                     background-color: {top_column_color};
                 }}
+                tr:nth-child(2n+1) td {{
+                    background-color: {alt_color_1};
+                }}
+                tr:nth-child(2n+2) td {{
+                    background-color: {alt_color_2};
+                }}
             </style>
         </head>
-        <body>
+        <body>'''
+
+        if title_flag:
+            html_content += f'<h1>{title_text}</h1>'
+
+        html_content += '''
             <table>
                 <thead>
                     <tr>'''
