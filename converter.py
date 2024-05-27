@@ -50,7 +50,9 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes):
         "border_color": "black",
         "title": "true",
         "title_text": "CSV Data",
-        "title_color": "black"
+        "title_color": "black",
+        "row_alternating": "true",
+        "column_alternating": "false"
     }
 
     settings = {**default_preferences, **preferences}
@@ -73,6 +75,8 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes):
     title_flag = settings["title"].lower() == "true"
     title_text = settings["title_text"]
     title_color = settings["title_color"]
+    row_alternating = settings["row_alternating"].lower() == "true"
+    column_alternating = settings["column_alternating"].lower() == "true"
 
     if title_text == "":
         title_text = "CSV Data"
@@ -112,12 +116,10 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes):
                 td:first-child {{
                     background-color: {top_column_color};
                 }}
-                tr:nth-child(2n+1) td {{
-                    background-color: {alt_color_1};
-                }}
-                tr:nth-child(2n+2) td {{
-                    background-color: {alt_color_2};
-                }}
+                {'tr:nth-child(2n+1) td { background-color: ' + alt_color_1 + '; }' if row_alternating else ''}
+                {'tr:nth-child(2n+2) td { background-color: ' + alt_color_2 + '; }' if row_alternating else ''}
+                {'' if row_alternating else 'tr td { background-color: ' + alt_color_1 + '; }'}
+                {''.join(['td:nth-child(2n+1) { background-color: ' + alt_color_1 + '; }', 'td:nth-child(2n+2) { background-color: ' + alt_color_2 + '; }']) if column_alternating else ''}
             </style>
         </head>
         <body>'''
@@ -145,7 +147,11 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes):
                 if column_index == 0:
                     html_content += f'<td style="background-color:{top_column_color}">{column}</td>'
                 else:
-                    html_content += f'<td>{column}</td>'
+                    if column_alternating:
+                        column_background = alt_color_1 if column_index % 2 == 1 else alt_color_2
+                        html_content += f'<td style="background-color:{column_background}">{column}</td>'
+                    else:
+                        html_content += f'<td>{column}</td>'
             html_content += '</tr>'
         html_content += '''
                 </tbody>
