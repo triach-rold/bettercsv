@@ -20,7 +20,23 @@ def read_preferences(pref_file_path):
                 preferences[key.strip()] = value.strip().rstrip(';')
     return preferences
 
-def csv_to_html(csv_file_path, html_file_path, preferences):
+def read_color_themes(theme_file_path):
+    color_themes = {}
+    with open(theme_file_path, 'r', encoding='utf-8') as theme_file:
+        current_theme = None
+        for line in theme_file:
+            stripped_line = line.strip()
+            if stripped_line.endswith(':{'):
+                current_theme = stripped_line[:-2]
+                color_themes[current_theme] = {}
+            elif stripped_line == '}':
+                current_theme = None
+            elif current_theme and stripped_line and not stripped_line.startswith('//'):
+                key, value = stripped_line.split(':')
+                color_themes[current_theme][key.strip()] = value.strip().rstrip(';')
+    return color_themes
+
+def csv_to_html(csv_file_path, html_file_path, preferences, color_themes):
     default_preferences = {
         "top_row_color": "#F8D566",
         "top_column_color": "#E4E2DF",
@@ -36,131 +52,6 @@ def csv_to_html(csv_file_path, html_file_path, preferences):
         "title_text": "CSV Data",
         "title_color": "black"
     }
-    
-    color_themes = {
-    "dracula": {
-        "top_row_color": "#282A36",
-        "top_column_color": "#282A36",
-        "alt_color_1": "#6272A4",
-        "alt_color_2": "#44475A",
-        "background_color": "#282A36",
-        "border_color": "#8BE9FD",
-        "title_color": "#F8F8F2",
-        "cell_text_color": "#F8F8F2"
-    },
-    "light": {
-        "top_row_color": "#E0E0E0",
-        "top_column_color": "#FFFFFF",
-        "alt_color_1": "#F0F0F0",
-        "alt_color_2": "#FFFFFF",
-        "background_color": "#FFFFFF",
-        "border_color": "#CCCCCC",
-        "title_color": "#000000",
-        "cell_text_color": "#000000"
-    },
-    "solarized": {
-        "top_row_color": "#002B36",
-        "top_column_color": "#073642",
-        "alt_color_1": "#586e75",
-        "alt_color_2": "#657b83",
-        "background_color": "#FDF6E3",
-        "border_color": "#93A1A1",
-        "title_color": "#657B83",
-        "cell_text_color": "#FDF6E3"
-    },
-    "gruvbox": {
-        "top_row_color": "#282828",
-        "top_column_color": "#282828",
-        "alt_color_1": "#3C3836",
-        "alt_color_2": "#504945",
-        "background_color": "#282828",
-        "border_color": "#EBDBB2",
-        "title_color": "#EBDBB2",
-        "cell_text_color": "#EBDBB2"
-    },
-    "monokai": {
-        "top_row_color": "#272822",
-        "top_column_color": "#272822",
-        "alt_color_1": "#49483E",
-        "alt_color_2": "#3E3D32",
-        "background_color": "#272822",
-        "border_color": "#F8F8F0",
-        "title_color": "#F8F8F0",
-        "cell_text_color": "#F8F8F0"
-    },
-    "nord": {
-        "top_row_color": "#2E3440",
-        "top_column_color": "#2E3440",
-        "alt_color_1": "#3B4252",
-        "alt_color_2": "#434C5E",
-        "background_color": "#2E3440",
-        "border_color": "#D8DEE9",
-        "title_color": "#D8DEE9",
-        "cell_text_color": "#D8DEE9"
-    },
-    "tokyo-night": {
-        "top_row_color": "#1A1B26",
-        "top_column_color": "#1A1B26",
-        "alt_color_1": "#24283B",
-        "alt_color_2": "#1F2335",
-        "background_color": "#1A1B26",
-        "border_color": "#C0CAF5",
-        "title_color": "#C0CAF5",
-        "cell_text_color": "#C0CAF5"
-    },
-    "oceanic-next": {
-        "top_row_color": "#1B2B34",
-        "top_column_color": "#343D46",
-        "alt_color_1": "#4F5B66",
-        "alt_color_2": "#65737E",
-        "background_color": "#1B2B34",
-        "border_color": "#A7ADBA",
-        "title_color": "#C0C5CE",
-        "cell_text_color": "#C0C5CE"
-    },
-    "palenight": {
-        "top_row_color": "#292D3E",
-        "top_column_color": "#444267",
-        "alt_color_1": "#32374D",
-        "alt_color_2": "#464B5D",
-        "background_color": "#292D3E",
-        "border_color": "#959DCB",
-        "title_color": "#959DCB",
-        "cell_text_color": "#959DCB"
-    },
-    "ayu-mirage": {
-        "top_row_color": "#17191E",
-        "top_column_color": "#242B38",
-        "alt_color_1": "#1F2430",
-        "alt_color_2": "#343D46",
-        "background_color": "#17191E",
-        "border_color": "#6C7680",
-        "title_color": "#D9D7CE",
-        "cell_text_color": "#D9D7CE"
-    },
-    "material": {
-        "top_row_color": "#263238",
-        "top_column_color": "#37474F",
-        "alt_color_1": "#455A64",
-        "alt_color_2": "#546E7A",
-        "background_color": "#263238",
-        "border_color": "#B0BEC5",
-        "title_color": "#ECEFF1",
-        "cell_text_color": "#ECEFF1"
-    },
-    "tomorrow-night": {
-        "top_row_color": "#1D1F21",
-        "top_column_color": "#282A2E",
-        "alt_color_1": "#373B41",
-        "alt_color_2": "#4D4D4C",
-        "background_color": "#1D1F21",
-        "border_color": "#C5C8C6",
-        "title_color": "#C5C8C6",
-        "cell_text_color": "#C5C8C6"
-    }
-}
-
-
 
     settings = {**default_preferences, **preferences}
 
@@ -266,7 +157,10 @@ def csv_to_html(csv_file_path, html_file_path, preferences):
         htmlfile.write(html_content)
 
 pref_file_path = 'pref.txt'
+theme_file_path = 'colorthemes.txt'
 csv_file_path = 'example.csv'
 html_file_path = 'output.html'
+
 preferences = read_preferences(pref_file_path)
-csv_to_html(csv_file_path, html_file_path, preferences)
+color_themes = read_color_themes(theme_file_path)
+csv_to_html(csv_file_path, html_file_path, preferences, color_themes)
