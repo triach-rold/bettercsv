@@ -36,25 +36,17 @@ def read_color_themes(theme_file_path):
                 color_themes[current_theme][key.strip()] = value.strip().rstrip(';')
     return color_themes
 
-def csv_to_html(csv_file_path, html_file_path, preferences, color_themes):
-    default_preferences = {
-        "top_row_color": "#F8D566",
-        "top_column_color": "#E4E2DF",
-        "alt_color_1": "#FFFBF0",
-        "alt_color_2": "#EFEBE3",
-        "background_color": "#FFFBF0",
-        "cell_font_name": "Avenir Next",
-        "cell_text_color": "black",
-        "anti_alternating": "false",
-        "border_thickness": "1px",
-        "border_color": "black",
-        "title": "true",
-        "title_text": "CSV Data",
-        "title_color": "black",
-        "row_alternating": "true",
-        "column_alternating": "false"
-    }
+def read_defaults(defaults_file_path):
+    defaults = {}
+    with open(defaults_file_path, 'r', encoding='utf-8') as defaults_file:
+        for line in defaults_file:
+            stripped_line = line.strip()
+            if stripped_line and not stripped_line.startswith('//'):
+                key, value = stripped_line.split(':')
+                defaults[key.strip()] = value.strip().rstrip(';')
+    return defaults
 
+def csv_to_html(csv_file_path, html_file_path, preferences, color_themes, default_preferences):
     settings = {**default_preferences, **preferences}
 
     selected_theme = settings.get("colortheme")
@@ -144,14 +136,17 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes):
             row_index += 1
             html_content += '<tr>'
             for column_index, column in enumerate(row):
+                cell_style = ""
+                if row_alternating:
+                    cell_style = f"background-color:{alt_color_1 if row_index % 2 == 1 else alt_color_2};"
+                if column_alternating:
+                    cell_style = f"background-color:{alt_color_1 if column_index % 2 == 1 else alt_color_2};"
+                if row_alternating and column_alternating:
+                    cell_style = f"background-color:{alt_color_1 if (row_index + column_index) % 2 == 0 else alt_color_2};"
                 if column_index == 0:
-                    html_content += f'<td style="background-color:{top_column_color}">{column}</td>'
+                    html_content += f'<td style="background-color:{top_column_color}; {cell_style}">{column}</td>'
                 else:
-                    if column_alternating:
-                        column_background = alt_color_1 if column_index % 2 == 1 else alt_color_2
-                        html_content += f'<td style="background-color:{column_background}">{column}</td>'
-                    else:
-                        html_content += f'<td>{column}</td>'
+                    html_content += f'<td style="{cell_style}">{column}</td>'
             html_content += '</tr>'
         html_content += '''
                 </tbody>
@@ -164,9 +159,11 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes):
 
 pref_file_path = 'pref.txt'
 theme_file_path = 'colorthemes.txt'
+defaults_file_path = 'defaults.txt'
 csv_file_path = 'example.csv'
 html_file_path = 'output.html'
 
+default_preferences = read_defaults(defaults_file_path)
 preferences = read_preferences(pref_file_path)
 color_themes = read_color_themes(theme_file_path)
-csv_to_html(csv_file_path, html_file_path, preferences, color_themes)
+csv_to_html(csv_file_path, html_file_path, preferences, color_themes, default_preferences)
