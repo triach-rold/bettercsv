@@ -1,17 +1,3 @@
-default:{
-    top_row_color: #F8D566;
-    top_column_color: #E4E2DF;
-    alt_color_1: #FFFBF0;
-    alt_color_2: #EFEBE3;
-    background_color: #FFFBF0;
-    cell_font_name: Avenir Next;
-    anti_alternating: false;
-    border_thickness: 1px;
-    border_color: black;
-    title: true;
-    title_text: CSV Data;
-    title_color: black;
-}
 user:{
     row_alternating : true;
 }
