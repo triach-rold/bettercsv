@@ -1,3 +1,16 @@
 user:{
-    row_alternating : true;
+    row_alternating: true;
+    column_alternating: true;
+    row_specific(1): {
+        color: red;
+        font: Arial;
+        font_color: #000000;
+        font_size: 14px;
+    }
+    column_specific(3): {
+        color: #FF0000;
+        font: Arial;
+        font_color: #FFFFFF;
+        font_size: 12px;
+    }
 }

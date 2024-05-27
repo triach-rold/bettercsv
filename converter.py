@@ -1,9 +1,13 @@
 import csv
+import re
 
 def read_preferences(pref_file_path):
     preferences = {}
+    row_specific_styles = {}
+    column_specific_styles = {}
     with open(pref_file_path, 'r', encoding='utf-8') as pref_file:
         mode = None
+        current_specifier = None
         for line in pref_file:
             stripped_line = line.strip()
             if stripped_line.startswith('default:{'):
@@ -13,11 +17,29 @@ def read_preferences(pref_file_path):
                 mode = 'user'
                 continue
             elif stripped_line == '}':
+                if current_specifier:
+                    if 'row_specific' in current_specifier:
+                        row_number = int(current_specifier.split('(')[1].split(')')[0])
+                        row_specific_styles[row_number] = specific_styles
+                    elif 'column_specific' in current_specifier:
+                        column_number = int(current_specifier.split('(')[1].split(')')[0])
+                        column_specific_styles[column_number] = specific_styles
+                    current_specifier = None
                 mode = None
                 continue
             if mode and stripped_line and not stripped_line.startswith('//'):
-                key, value = stripped_line.split(':')
-                preferences[key.strip()] = value.strip().rstrip(';')
+                if stripped_line.startswith('row_specific') or stripped_line.startswith('column_specific'):
+                    current_specifier = stripped_line.split(':')[0].strip()
+                    specific_styles = {}
+                    continue
+                if current_specifier:
+                    key, value = stripped_line.split(':')
+                    specific_styles[key.strip()] = value.strip().rstrip(';')
+                else:
+                    key, value = stripped_line.split(':')
+                    preferences[key.strip()] = value.strip().rstrip(';')
+    preferences['row_specific'] = row_specific_styles
+    preferences['column_specific'] = column_specific_styles
     return preferences
 
 def read_color_themes(theme_file_path):
@@ -46,6 +68,32 @@ def read_defaults(defaults_file_path):
                 defaults[key.strip()] = value.strip().rstrip(';')
     return defaults
 
+def apply_specific_styles(html_content, specific_styles, index, is_row):
+    if index in specific_styles:
+        styles = specific_styles[index]
+        style_string = ""
+        for key, value in styles.items():
+            if key == "color":
+                style_string += f"background-color:{value};"
+            elif key == "font":
+                style_string += f"font-family:{value};"
+            elif key == "font_color":
+                style_string += f"color:{value};"
+            elif key == "font_size":
+                style_string += f"font-size:{value};"
+        if is_row:
+            html_content = html_content.replace(f'<tr>', f'<tr style="{style_string}">', 1)
+        else:
+            pattern = re.compile(f'(<td[^>]*>(?:(?!</td>).)*</td>)')
+            matches = pattern.findall(html_content)
+            if matches:
+                column_index = index - 1
+                if column_index < len(matches):
+                    match = matches[column_index]
+                    replacement = match.replace('<td', f'<td style="{style_string}"')
+                    html_content = html_content.replace(match, replacement, 1)
+    return html_content
+
 def csv_to_html(csv_file_path, html_file_path, preferences, color_themes, default_preferences):
     settings = {**default_preferences, **preferences}
 
@@ -69,6 +117,8 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes, defaul
     title_color = settings["title_color"]
     row_alternating = settings["row_alternating"].lower() == "true"
     column_alternating = settings["column_alternating"].lower() == "true"
+    row_specific_styles = settings.get("row_specific", {})
+    column_specific_styles = settings.get("column_specific", {})
 
     if title_text == "":
         title_text = "CSV Data"
@@ -134,7 +184,7 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes, defaul
         row_index = 0
         for row in reader:
             row_index += 1
-            html_content += '<tr>'
+            row_html_content = '<tr>'
             for column_index, column in enumerate(row):
                 cell_style = ""
                 if row_alternating:
@@ -144,10 +194,33 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes, defaul
                 if row_alternating and column_alternating:
                     cell_style = f"background-color:{alt_color_1 if (row_index + column_index) % 2 == 0 else alt_color_2};"
                 if column_index == 0:
-                    html_content += f'<td style="background-color:{top_column_color}; {cell_style}">{column}</td>'
+                    row_html_content += f'<td style="background-color:{top_column_color}; {cell_style}">{column}</td>'
                 else:
-                    html_content += f'<td style="{cell_style}">{column}</td>'
-            html_content += '</tr>'
+                    row_html_content += f'<td style="{cell_style}">{column}</td>'
+            row_html_content += '</tr>'
+            row_html_content = apply_specific_styles(row_html_content, row_specific_styles, row_index, is_row=True)
+            html_content += row_html_content
+
+        # Apply column-specific styles
+        for col_num, styles in column_specific_styles.items():
+            column_index = col_num - 1
+            pattern = re.compile(f'(<td[^>]*>(?:(?!</td>).)*</td>)')
+            matches = pattern.findall(html_content)
+            for i, match in enumerate(matches):
+                if (i % len(headers)) == column_index:
+                    style_string = ""
+                    for key, value in styles.items():
+                        if key == "color":
+                            style_string += f"background-color:{value};"
+                        elif key == "font":
+                            style_string += f"font-family:{value};"
+                        elif key == "font_color":
+                            style_string += f"color:{value};"
+                        elif key == "font_size":
+                            style_string += f"font-size:{value};"
+                    replacement = match.replace('<td', f'<td style="{style_string}"')
+                    html_content = html_content.replace(match, replacement, 1)
+
         html_content += '''
                 </tbody>
             </table>
