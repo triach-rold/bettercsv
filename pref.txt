@@ -1,4 +1,4 @@
 user:{
     colortheme : one-dark;
 }
-colortheme : dracula;
+colortheme : dracula; 
