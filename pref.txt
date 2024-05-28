@@ -1,3 +1,4 @@
 user:{
-    colortheme : midnight-blue;
+    colortheme : one-dark;
 }
+colortheme : dracula;

@@ -5,6 +5,7 @@ def read_preferences(pref_file_path):
     preferences = {}
     row_specific_styles = {}
     column_specific_styles = {}
+    user_preferences = {}
     with open(pref_file_path, 'r', encoding='utf-8') as pref_file:
         mode = None
         current_specifier = None
@@ -27,7 +28,7 @@ def read_preferences(pref_file_path):
                     current_specifier = None
                 mode = None
                 continue
-            if mode and stripped_line and not stripped_line.startswith('//'):
+            if stripped_line and not stripped_line.startswith('//'):
                 if stripped_line.startswith('row_specific') or stripped_line.startswith('column_specific'):
                     current_specifier = stripped_line.split(':')[0].strip()
                     specific_styles = {}
@@ -37,9 +38,14 @@ def read_preferences(pref_file_path):
                     specific_styles[key.strip()] = value.strip().rstrip(';')
                 else:
                     key, value = stripped_line.split(':')
-                    preferences[key.strip()] = value.strip().rstrip(';')
+                    if mode == 'default':
+                        preferences[key.strip()] = value.strip().rstrip(';')
+                    else:
+                        user_preferences[key.strip()] = value.strip().rstrip(';')
+
     preferences['row_specific'] = row_specific_styles
     preferences['column_specific'] = column_specific_styles
+    preferences.update(user_preferences)
     return preferences
 
 def read_color_themes(theme_file_path):
