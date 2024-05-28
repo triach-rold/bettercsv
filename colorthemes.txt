@@ -118,3 +118,43 @@ tomorrow-night:{
     title_color: #C5C8C6;
     cell_text_color: #C5C8C6;
 }
+dark-matter:{
+    top_row_color: #101820;
+    top_column_color: #101820;
+    alt_color_1: #28334A;
+    alt_color_2: #424C61;
+    background_color: #101820;
+    border_color: #F2AA4C;
+    title_color: #F2AA4C;
+    cell_text_color: #F2AA4C;
+}
+forest-night:{
+    top_row_color: #2E3B3B;
+    top_column_color: #2E3B3B;
+    alt_color_1: #4B5E5E;
+    alt_color_2: #617C7C;
+    background_color: #2E3B3B;
+    border_color: #9DBEBB;
+    title_color: #9DBEBB;
+    cell_text_color: #9DBEBB;
+}
+vintage:{
+    top_row_color: #A67F59;
+    top_column_color: #A67F59;
+    alt_color_1: #D9BF77;
+    alt_color_2: #E0DDAA;
+    background_color: #F4F1DE;
+    border_color: #C08497;
+    title_color: #C08497;
+    cell_text_color: #C08497;
+}
+midnight-blue:{
+    top_row_color: #003366;
+    top_column_color: #003366;
+    alt_color_1: #004080;
+    alt_color_2: #0059B3;
+    background_color: #001F3F;
+    border_color: #6699CC;
+    title_color: #6699CC;
+    cell_text_color: #6699CC;
+}
