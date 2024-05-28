@@ -115,6 +115,7 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes, defaul
     title_flag = settings["title"].lower() == "true"
     title_text = settings["title_text"]
     title_color = settings["title_color"]
+    website_title = settings["website_title"]
     row_alternating = settings["row_alternating"].lower() == "true"
     column_alternating = settings["column_alternating"].lower() == "true"
     row_specific_styles = settings.get("row_specific", {})
@@ -132,7 +133,7 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes, defaul
         html_content = f'''
         <html lang="en">
         <head>
-            <title>CSV to HTML</title>
+            <title>{website_title}</title>
             <style>
                 h1 {{
                     text-align: center;
