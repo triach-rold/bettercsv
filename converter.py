@@ -3,8 +3,7 @@ import re
 
 def read_preferences(pref_file_path):
     preferences = {}
-    row_specific_styles = {}
-    column_specific_styles = {}
+    cell_specific_styles = {}
     user_preferences = {}
     with open(pref_file_path, 'r', encoding='utf-8') as pref_file:
         mode = None
@@ -19,17 +18,18 @@ def read_preferences(pref_file_path):
                 continue
             elif stripped_line == '}':
                 if current_specifier:
-                    if 'row_specific' in current_specifier:
-                        row_number = int(current_specifier.split('(')[1].split(')')[0])
-                        row_specific_styles[row_number] = specific_styles
-                    elif 'column_specific' in current_specifier:
-                        column_number = int(current_specifier.split('(')[1].split(')')[0])
-                        column_specific_styles[column_number] = specific_styles
+                    if 'cell_specific' in current_specifier:
+                        parts = current_specifier.split('(')[1].split(')')[0].split(')(')
+                        row_number = int(parts[0])
+                        column_number = int(parts[1])
+                        if row_number not in cell_specific_styles:
+                            cell_specific_styles[row_number] = {}
+                        cell_specific_styles[row_number][column_number] = specific_styles
                     current_specifier = None
                 mode = None
                 continue
             if stripped_line and not stripped_line.startswith('//'):
-                if stripped_line.startswith('row_specific') or stripped_line.startswith('column_specific'):
+                if stripped_line.startswith('cell_specific'):
                     current_specifier = stripped_line.split(':')[0].strip()
                     specific_styles = {}
                     continue
@@ -43,10 +43,10 @@ def read_preferences(pref_file_path):
                     else:
                         user_preferences[key.strip()] = value.strip().rstrip(';')
 
-    preferences['row_specific'] = row_specific_styles
-    preferences['column_specific'] = column_specific_styles
+    preferences['cell_specific'] = cell_specific_styles
     preferences.update(user_preferences)
     return preferences
+
 
 def read_color_themes(theme_file_path):
     color_themes = {}
