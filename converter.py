@@ -74,9 +74,9 @@ def read_defaults(defaults_file_path):
                 defaults[key.strip()] = value.strip().rstrip(';')
     return defaults
 
-def apply_specific_styles(html_content, specific_styles, index, is_row):
-    if index in specific_styles:
-        styles = specific_styles[index]
+def apply_specific_styles(html_content, specific_styles, row_index, column_index):
+    if row_index in specific_styles and column_index in specific_styles[row_index]:
+        styles = specific_styles[row_index][column_index]
         style_string = ""
         for key, value in styles.items():
             if key == "color":
@@ -87,17 +87,26 @@ def apply_specific_styles(html_content, specific_styles, index, is_row):
                 style_string += f"color:{value};"
             elif key == "font_size":
                 style_string += f"font-size:{value};"
-        if is_row:
-            html_content = html_content.replace(f'<tr>', f'<tr style="{style_string}">', 1)
-        else:
+            elif key == "border_color":
+                style_string += f"border-color:{value};"
+            elif key == "bold" and value.lower() == "true":
+                style_string += "font-weight:bold;"
+            elif key == "italics" and value.lower() == "true":
+                style_string += "font-style:italic;"
+            elif key == "strikethrough" and value.lower() == "true":
+                style_string += "text-decoration:line-through;"
+        
+        pattern = re.compile(f'(<tr>.*?</tr>)', re.DOTALL)
+        matches = pattern.findall(html_content)
+        if matches and row_index < len(matches):
+            row = matches[row_index]
             pattern = re.compile(f'(<td[^>]*>(?:(?!</td>).)*</td>)')
-            matches = pattern.findall(html_content)
-            if matches:
-                column_index = index - 1
-                if column_index < len(matches):
-                    match = matches[column_index]
-                    replacement = match.replace('<td', f'<td style="{style_string}"')
-                    html_content = html_content.replace(match, replacement, 1)
+            cells = pattern.findall(row)
+            if cells and column_index < len(cells):
+                cell = cells[column_index]
+                replacement = cell.replace('<td', f'<td style="{style_string}"')
+                new_row = row.replace(cell, replacement, 1)
+                html_content = html_content.replace(row, new_row, 1)
     return html_content
 
 def csv_to_html(csv_file_path, html_file_path, preferences, color_themes, default_preferences):
