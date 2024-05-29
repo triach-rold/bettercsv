@@ -133,8 +133,7 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes, defaul
     website_title = settings["website_title"]
     row_alternating = settings["row_alternating"].lower() == "true"
     column_alternating = settings["column_alternating"].lower() == "true"
-    row_specific_styles = settings.get("row_specific", {})
-    column_specific_styles = settings.get("column_specific", {})
+    cell_specific_styles = settings.get("cell_specific", {})
 
     if title_text == "":
         title_text = "CSV Data"
@@ -214,28 +213,8 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes, defaul
                 else:
                     row_html_content += f'<td style="{cell_style}">{column}</td>'
             row_html_content += '</tr>'
-            row_html_content = apply_specific_styles(row_html_content, row_specific_styles, row_index, is_row=True)
+            row_html_content = apply_specific_styles(row_html_content, cell_specific_styles, row_index, column_index)
             html_content += row_html_content
-
-        # Apply column-specific styles
-        for col_num, styles in column_specific_styles.items():
-            column_index = col_num - 1
-            pattern = re.compile(f'(<td[^>]*>(?:(?!</td>).)*</td>)')
-            matches = pattern.findall(html_content)
-            for i, match in enumerate(matches):
-                if (i % len(headers)) == column_index:
-                    style_string = ""
-                    for key, value in styles.items():
-                        if key == "color":
-                            style_string += f"background-color:{value};"
-                        elif key == "font":
-                            style_string += f"font-family:{value};"
-                        elif key == "font_color":
-                            style_string += f"color:{value};"
-                        elif key == "font_size":
-                            style_string += f"font-size:{value};"
-                    replacement = match.replace('<td', f'<td style="{style_string}"')
-                    html_content = html_content.replace(match, replacement, 1)
 
         html_content += '''
                 </tbody>
