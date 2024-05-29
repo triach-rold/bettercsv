@@ -8,6 +8,7 @@ def read_preferences(pref_file_path):
     with open(pref_file_path, 'r', encoding='utf-8') as pref_file:
         mode = None
         current_specifier = None
+        specific_styles = {}
         for line in pref_file:
             stripped_line = line.strip()
             if stripped_line.startswith('default:{'):
@@ -17,21 +18,21 @@ def read_preferences(pref_file_path):
                 mode = 'user'
                 continue
             elif stripped_line == '}':
-                if current_specifier:
-                    if 'cell_specific' in current_specifier:
-                        parts = current_specifier.split('(')[1].split(')')[0].split(')(')
+                if current_specifier and 'cell_specific' in current_specifier:
+                    parts = current_specifier.split('(')[1].split(')')[0].split(',')
+                    if len(parts) == 2:
                         row_number = int(parts[0])
                         column_number = int(parts[1])
                         if row_number not in cell_specific_styles:
                             cell_specific_styles[row_number] = {}
                         cell_specific_styles[row_number][column_number] = specific_styles
-                    current_specifier = None
+                current_specifier = None
+                specific_styles = {}
                 mode = None
                 continue
             if stripped_line and not stripped_line.startswith('//'):
                 if stripped_line.startswith('cell_specific'):
                     current_specifier = stripped_line.split(':')[0].strip()
-                    specific_styles = {}
                     continue
                 if current_specifier:
                     key, value = stripped_line.split(':')
@@ -46,7 +47,6 @@ def read_preferences(pref_file_path):
     preferences['cell_specific'] = cell_specific_styles
     preferences.update(user_preferences)
     return preferences
-
 
 def read_color_themes(theme_file_path):
     color_themes = {}
@@ -95,7 +95,6 @@ def apply_specific_styles(html_content, specific_styles, row_index, column_index
                 style_string += "font-style:italic;"
             elif key == "strikethrough" and value.lower() == "true":
                 style_string += "text-decoration:line-through;"
-        
         pattern = re.compile(f'(<tr>.*?</tr>)', re.DOTALL)
         matches = pattern.findall(html_content)
         if matches and row_index < len(matches):

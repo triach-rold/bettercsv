@@ -1,4 +1,22 @@
-user:{
-    colortheme : one-dark;
-}
-colortheme : dracula; 
+
+
+    cell_specific(2)(2): {
+        color: #ff0000;
+        font: Courier New;
+        font_color: #0000ff;
+        font_size: 160px;
+        border_color: #00ff00;
+        bold: true;
+        italics: true;
+        strikethrough: false;
+    }
+    cell_specific(0)(1): {
+        color: #00ff00;
+        font: Times New Roman;
+        font_color: #ff00ff;
+        font_size: 14px;
+        border_color: #0000ff;
+        bold: false;
+        italics: false;
+        strikethrough: true;
+    }
