@@ -1,5 +1,6 @@
 import csv
 import re
+import json
 
 def read_preferences(pref_file_path):
     preferences = {}
@@ -47,33 +48,6 @@ def read_preferences(pref_file_path):
     preferences['cell_specific'] = cell_specific_styles
     preferences.update(user_preferences)
     return preferences
-
-def read_color_themes(theme_file_path):
-    color_themes = {}
-    with open(theme_file_path, 'r', encoding='utf-8') as theme_file:
-        current_theme = None
-        for line in theme_file:
-            stripped_line = line.strip()
-            if stripped_line.endswith(':{'):
-                current_theme = stripped_line[:-2]
-                color_themes[current_theme] = {}
-            elif stripped_line == '}':
-                current_theme = None
-            elif current_theme and stripped_line and not stripped_line.startswith('//'):
-                key, value = stripped_line.split(':')
-                color_themes[current_theme][key.strip()] = value.strip().rstrip(';')
-    return color_themes
-
-def read_defaults(defaults_file_path):
-    defaults = {}
-    with open(defaults_file_path, 'r', encoding='utf-8') as defaults_file:
-        for line in defaults_file:
-            stripped_line = line.strip()
-            if stripped_line and not stripped_line.startswith('//'):
-                key, value = stripped_line.split(':')
-                defaults[key.strip()] = value.strip().rstrip(';')
-    return defaults
-
 
 def read_color_themes(theme_file_path):
     color_themes = {}
@@ -160,6 +134,10 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes, defaul
     row_alternating = settings["row_alternating"].lower() == "true"
     column_alternating = settings["column_alternating"].lower() == "true"
     cell_specific_styles = settings.get("cell_specific", {})
+    switcher = settings.get("switcher", "false").lower() == "true"
+    switcher_font = settings.get("switcher_font", "Arial")
+    switcher_color = settings.get("switcher_color", "#000000")
+    switcher_font_size = settings.get("switcher_font_size", "14px")
 
     if title_text == "":
         title_text = "CSV Data"
@@ -175,40 +153,78 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes, defaul
         <head>
             <title>{website_title}</title>
             <style>
+                :root {{
+                    --background-color: {background_color};
+                    --top-row-color: {top_row_color};
+                    --top-column-color: {top_column_color};
+                    --alt-color-1: {alt_color_1};
+                    --alt-color-2: {alt_color_2};
+                    --cell-font-name: '{cell_font_name}';
+                    --cell-text-color: {cell_text_color};
+                    --border-color: {border_color};
+                    --border-thickness: {border_thickness};
+                }}
                 h1 {{
                     text-align: center;
                     color: {title_color};
                 }}
                 body {{
-                    background-color: {background_color};
-                    font-family: '{cell_font_name}', sans-serif;
+                    background-color: var(--background-color);
+                    font-family: var(--cell-font-name), sans-serif;
                 }}
                 table {{
                     width: 100%;
                     border-collapse: collapse;
                 }}
                 th, td {{
-                    color: {cell_text_color};
-                    border: {border_thickness} solid {border_color};
+                    color: var(--cell-text-color);
+                    border: var(--border-thickness) solid var(--border-color);
                     padding: 8px;
                     text-align: left;
                 }}
                 tr:first-child {{
-                    background-color: {top_row_color};
+                    background-color: var(--top-row-color);
                 }}
                 td:first-child {{
-                    background-color: {top_column_color};
+                    background-color: var(--top-column-color);
                 }}
-                {'tr:nth-child(2n+1) td { background-color: ' + alt_color_1 + '; }' if row_alternating else ''}
-                {'tr:nth-child(2n+2) td { background-color: ' + alt_color_2 + '; }' if row_alternating else ''}
-                {'' if row_alternating else 'tr td { background-color: ' + alt_color_1 + '; }'}
-                {''.join(['td:nth-child(2n+1) { background-color: ' + alt_color_1 + '; }', 'td:nth-child(2n+2) { background-color: ' + alt_color_2 + '; }']) if column_alternating else ''}
+                {'tr:nth-child(2n+1) td { background-color: var(--alt-color-1); }' if row_alternating else ''}
+                {'tr:nth-child(2n+2) td { background-color: var(--alt-color-2); }' if row_alternating else ''}
+                {'' if row_alternating else 'tr td { background-color: var(--alt-color-1); }'}
+                {''.join(['td:nth-child(2n+1) { background-color: var(--alt-color-1); }', 'td:nth-child(2n+2) { background-color: var(--alt-color-2); }']) if column_alternating else ''}
             </style>
+            <script>
+                function changeTheme(theme) {{
+                    var themes = {json.dumps(color_themes)};
+                    var selectedTheme = themes[theme];
+                    if (selectedTheme) {{
+                        document.documentElement.style.setProperty('--background-color', selectedTheme.background_color);
+                        document.documentElement.style.setProperty('--top-row-color', selectedTheme.top_row_color);
+                        document.documentElement.style.setProperty('--top-column-color', selectedTheme.top_column_color);
+                        document.documentElement.style.setProperty('--alt-color-1', selectedTheme.alt_color_1);
+                        document.documentElement.style.setProperty('--alt-color-2', selectedTheme.alt_color_2);
+                        document.documentElement.style.setProperty('--cell-font-name', selectedTheme.cell_font_name);
+                        document.documentElement.style.setProperty('--cell-text-color', selectedTheme.cell_text_color);
+                        document.documentElement.style.setProperty('--border-color', selectedTheme.border_color);
+                        document.documentElement.style.setProperty('--border-thickness', selectedTheme.border_thickness);
+                    }}
+                }}
+            </script>
         </head>
         <body>'''
 
         if title_flag:
             html_content += f'<h1>{title_text}</h1>'
+
+        if switcher:
+            html_content += f'''
+            <div style="text-align:center;">
+                <label for="themeSwitcher" style="font-family:{switcher_font};color:{switcher_color};font-size:{switcher_font_size};">Select Color Theme:</label>
+                <select id="themeSwitcher" onchange="changeTheme(this.value)" style="font-family:{switcher_font};color:{switcher_color};font-size:{switcher_font_size};">
+            '''
+            for theme in color_themes.keys():
+                html_content += f'<option value="{theme}">{theme}</option>'
+            html_content += '</select></div>'
 
         html_content += '''
             <table>
@@ -229,13 +245,13 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes, defaul
             for column_index, column in enumerate(row):
                 cell_style = ""
                 if row_alternating:
-                    cell_style = f"background-color:{alt_color_1 if row_index % 2 == 1 else alt_color_2};"
+                    cell_style = f"background-color:var(--alt-color-1);" if row_index % 2 == 1 else f"background-color:var(--alt-color-2);"
                 if column_alternating:
-                    cell_style = f"background-color:{alt_color_1 if column_index % 2 == 1 else alt_color_2};"
+                    cell_style = f"background-color:var(--alt-color-1);" if column_index % 2 == 1 else f"background-color:var(--alt-color-2);"
                 if row_alternating and column_alternating:
-                    cell_style = f"background-color:{alt_color_1 if (row_index + column_index) % 2 == 0 else alt_color_2};"
+                    cell_style = f"background-color:var(--alt-color-1);" if (row_index + column_index) % 2 == 0 else f"background-color:var(--alt-color-2);"
                 if column_index == 0:
-                    row_html_content += f'<td style="background-color:{top_column_color}; {cell_style}">{column}</td>'
+                    row_html_content += f'<td style="background-color:var(--top-column-color); {cell_style}">{column}</td>'
                 else:
                     row_html_content += f'<td style="{cell_style}">{column}</td>'
             row_html_content += '</tr>'
