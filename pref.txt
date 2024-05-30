@@ -1,5 +1,4 @@
 default:{
-    colortheme: light
     switcher: true
     switcher_font: Arial
     switcher_color: #000000
