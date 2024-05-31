@@ -7,14 +7,14 @@ alt_color_4: black;
 background_color: #FFFBF0;
 cell_font_name: Avenir Next;
 cell_text_color: black;
-anti_alternating: false;
+anti_banding: false;
 border_thickness: 1px;
 border_color: black;
 title: true;
 title_text: CSV Data;
 title_color: black;
-row_alternating: true;
-column_alternating: false;
+row_banding: true;
+column_banding: false;
 website_title: BetterCSV Website;
 custom_filename: output
 custom_input_filename: example

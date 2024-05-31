@@ -123,13 +123,13 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes, defaul
     cell_text_color = settings["cell_text_color"]
     border_color = settings["border_color"]
     border_thickness = settings["border_thickness"]
-    anti_alternating = settings["anti_alternating"].lower() == "true"
+    anti_banding = settings["anti_banding"].lower() == "true"
     title_flag = settings["title"].lower() == "true"
     title_text = settings["title_text"]
     title_color = settings["title_color"]
     website_title = settings["website_title"]
-    row_alternating = settings["row_alternating"].lower() == "true"
-    column_alternating = settings["column_alternating"].lower() == "true"
+    row_banding = settings["row_banding"].lower() == "true"
+    column_banding = settings["column_banding"].lower() == "true"
     cell_specific_styles = settings.get("cell_specific", {})
     switcher = settings.get("switcher", "false").lower() == "true"
     switcher_font = settings.get("switcher_font", "Arial")
@@ -137,7 +137,7 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes, defaul
     switcher_font_size = settings.get("switcher_font_size", "14px")
     if title_text == "":
         title_text = "CSV Data"
-    if anti_alternating:
+    if anti_banding:
         alt_color_1, alt_color_2 = alt_color_2, alt_color_1
     with open(csv_file_path, mode='r', newline='', encoding='utf-8') as csvfile:
         reader = csv.reader(csvfile)
@@ -184,10 +184,10 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes, defaul
                 td:first-child {{
                     background-color: var(--top-column-color);
                 }}
-                {'tr:nth-child(2n+1) td { background-color: var(--alt-color-1); }' if row_alternating else ''}
-                {'tr:nth-child(2n+2) td { background-color: var(--alt-color-2); }' if row_alternating else ''}
-                {'' if row_alternating else 'tr td { background-color: var(--alt-color-1); }'}
-                {''.join(['td:nth-child(2n+1) { background-color: var(--alt-color-1); }', 'td:nth-child(2n+2) { background-color: var(--alt-color-2); }']) if column_alternating else ''}
+                {'tr:nth-child(2n+1) td { background-color: var(--alt-color-1); }' if row_banding else ''}
+                {'tr:nth-child(2n+2) td { background-color: var(--alt-color-2); }' if row_banding else ''}
+                {'' if row_banding else 'tr td { background-color: var(--alt-color-1); }'}
+                {''.join(['td:nth-child(2n+1) { background-color: var(--alt-color-1); }', 'td:nth-child(2n+2) { background-color: var(--alt-color-2); }']) if column_banding else ''}
             </style>
             <script>
                 function changeTheme(theme) {{
@@ -240,11 +240,11 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes, defaul
             row_html_content = '<tr>'
             for column_index, column in enumerate(row):
                 cell_style = ""
-                if row_alternating:
+                if row_banding:
                     cell_style = f"background-color:var(--alt-color-1);" if row_index % 2 == 1 else f"background-color:var(--alt-color-2);"
-                if column_alternating:
+                if column_banding:
                     cell_style = f"background-color:var(--alt-color-1);" if column_index % 2 == 1 else f"background-color:var(--alt-color-2);"
-                if row_alternating and column_alternating:
+                if row_banding and column_banding:
                     cell_style = f"background-color:var(--alt-color-1);" if (row_index + column_index) % 2 == 0 else f"background-color:var(--alt-color-2);"
                 if column_index == 0:
                     row_html_content += f'<td style="background-color:var(--top-column-color); {cell_style}">{column}</td>'
