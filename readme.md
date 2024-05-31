@@ -15,11 +15,16 @@
 * **border_color:** Sets the color of the cell borders in the table.
 * **title_text:** Sets the text of the title displayed above the table.
 * **title_color:** Sets the color of the title text.
+* **switcher_font:** Sets the font of the switcher text.
+* **switcher_color:** Sets the color of the switcher text.
+* **switcher_font_size:** Sets the font size of the switcher text
 
 ### Currently Supported Customization Flags:
 * **anti_alternating:** If set to `true`, swaps the alternating row colors.
 * **title:** If set to `true`, a title is added above the table.
-
+* **switcher:** If set to `true`, a "color-switching" dropdown list is added below, allowing for fast color-switching. Optimal for websites open to the public.
+* **row_alternating:** If set to `true`, alternates the colors for rows.
+* **column_alternating:** If set to `true`, alternates the colors for columns.
 
 ## Currently Supported Control Structure Options - 
 General syntax is given as follows (doesn't apply to unspecified category)-
