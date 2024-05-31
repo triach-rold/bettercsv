@@ -43,7 +43,7 @@ General syntax is given as follows (doesn't apply to unspecified category)-
 ## Supported Colorthemes:
 *Note- check/edit colorthemes.txt to add/remove/edit custom colorthemes.*
 
-## Alpha (currently buggy or straight-up unstable features)
+## Alpha (currently buggy or straight-up unstable features):
 
 *Note- Bug reports for anything relating to this category are welcome, but will probably not be fixed anytime soon. Nothing here is there to stay and is expected to be unstable in production.*
 
@@ -55,3 +55,9 @@ parent_control_structure_name:{
     }
 }
 ```
+
+## Planned features (features under consideration/review):
+
+*Note- these features are planned or under review. There is no guarentee of them being added. If you have an implementation of any of these features that does not interfere with existing code and isn't buggy- submit a pull request.*
+
+* **css_injection_control_structure** - Control structure allowing for css injections in parts of code.
