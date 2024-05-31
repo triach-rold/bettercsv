@@ -1,10 +1,13 @@
 dracula:{
     top_row_color: #282A36;
     top_column_color: #282A36;
-    alt_color_1: #6272A4;
-    alt_color_2: #44475A;
+    alt_color_1: #44475A;
+    alt_color_2: #6272A4;
+    alt_color_3: #FF79C6;
+    alt_color_4: #BD93F9;
     background_color: #282A36;
-    border_color: #8BE9FD;
+    border_color: #FF79C6;
+    border_thickness: 1px;
     title_color: #F8F8F2;
     cell_text_color: #F8F8F2;
 }
@@ -13,8 +16,11 @@ light:{
     top_column_color: #FFFFFF;
     alt_color_1: #F0F0F0;
     alt_color_2: #FFFFFF;
+    alt_color_3: #CCCCCC;
+    alt_color_4: #BFBFBF;
     background_color: #FFFFFF;
     border_color: #CCCCCC;
+    border_thickness: 1px;
     title_color: #000000;
     cell_text_color: #000000;
 }
@@ -23,18 +29,24 @@ solarized:{
     top_column_color: #073642;
     alt_color_1: #586e75;
     alt_color_2: #657b83;
+    alt_color_3: #839496;
+    alt_color_4: #93A1A1;
     background_color: #FDF6E3;
-    border_color: #93A1A1;
+    border_color: #839496;
+    border_thickness: 1px;
     title_color: #657B83;
-    cell_text_color: #FDF6E3;
+    cell_text_color: #073642;
 }
 gruvbox:{
     top_row_color: #282828;
     top_column_color: #282828;
     alt_color_1: #3C3836;
     alt_color_2: #504945;
+    alt_color_3: #665C54;
+    alt_color_4: #7C6F64;
     background_color: #282828;
-    border_color: #EBDBB2;
+    border_color: #665C54;
+    border_thickness: 1px;
     title_color: #EBDBB2;
     cell_text_color: #EBDBB2;
 }
@@ -43,8 +55,11 @@ monokai:{
     top_column_color: #272822;
     alt_color_1: #49483E;
     alt_color_2: #3E3D32;
+    alt_color_3: #75715E;
+    alt_color_4: #A59F85;
     background_color: #272822;
-    border_color: #F8F8F0;
+    border_color: #75715E;
+    border_thickness: 1px;
     title_color: #F8F8F0;
     cell_text_color: #F8F8F0;
 }
@@ -53,8 +68,11 @@ nord:{
     top_column_color: #2E3440;
     alt_color_1: #3B4252;
     alt_color_2: #434C5E;
+    alt_color_3: #4C566A;
+    alt_color_4: #D8DEE9;
     background_color: #2E3440;
-    border_color: #D8DEE9;
+    border_color: #4C566A;
+    border_thickness: 1px;
     title_color: #D8DEE9;
     cell_text_color: #D8DEE9;
 }
@@ -63,8 +81,11 @@ tokyo-night:{
     top_column_color: #1A1B26;
     alt_color_1: #24283B;
     alt_color_2: #1F2335;
+    alt_color_3: #414868;
+    alt_color_4: #565F89;
     background_color: #1A1B26;
-    border_color: #C0CAF5;
+    border_color: #414868;
+    border_thickness: 1px;
     title_color: #C0CAF5;
     cell_text_color: #C0CAF5;
 }
@@ -73,8 +94,11 @@ oceanic-next:{
     top_column_color: #343D46;
     alt_color_1: #4F5B66;
     alt_color_2: #65737E;
+    alt_color_3: #A7ADBA;
+    alt_color_4: #C0C5CE;
     background_color: #1B2B34;
     border_color: #A7ADBA;
+    border_thickness: 1px;
     title_color: #C0C5CE;
     cell_text_color: #C0C5CE;
 }
@@ -83,8 +107,11 @@ palenight:{
     top_column_color: #444267;
     alt_color_1: #32374D;
     alt_color_2: #464B5D;
+    alt_color_3: #959DCB;
+    alt_color_4: #676E95;
     background_color: #292D3E;
     border_color: #959DCB;
+    border_thickness: 1px;
     title_color: #959DCB;
     cell_text_color: #959DCB;
 }
@@ -93,8 +120,11 @@ ayu-mirage:{
     top_column_color: #242B38;
     alt_color_1: #1F2430;
     alt_color_2: #343D46;
+    alt_color_3: #4A505A;
+    alt_color_4: #6C7680;
     background_color: #17191E;
-    border_color: #6C7680;
+    border_color: #4A505A;
+    border_thickness: 1px;
     title_color: #D9D7CE;
     cell_text_color: #D9D7CE;
 }
@@ -103,8 +133,11 @@ material:{
     top_column_color: #37474F;
     alt_color_1: #455A64;
     alt_color_2: #546E7A;
+    alt_color_3: #78909C;
+    alt_color_4: #90A4AE;
     background_color: #263238;
-    border_color: #B0BEC5;
+    border_color: #78909C;
+    border_thickness: 1px;
     title_color: #ECEFF1;
     cell_text_color: #ECEFF1;
 }
@@ -113,8 +146,11 @@ tomorrow-night:{
     top_column_color: #282A2E;
     alt_color_1: #373B41;
     alt_color_2: #4D4D4C;
+    alt_color_3: #5A5A5A;
+    alt_color_4: #707880;
     background_color: #1D1F21;
-    border_color: #C5C8C6;
+    border_color: #5A5A5A;
+    border_thickness: 1px;
     title_color: #C5C8C6;
     cell_text_color: #C5C8C6;
 }
@@ -123,8 +159,11 @@ dark-matter:{
     top_column_color: #101820;
     alt_color_1: #28334A;
     alt_color_2: #424C61;
+    alt_color_3: #5C6881;
+    alt_color_4: #7A86A2;
     background_color: #101820;
-    border_color: #F2AA4C;
+    border_color: #5C6881;
+    border_thickness: 1px;
     title_color: #F2AA4C;
     cell_text_color: #F2AA4C;
 }
@@ -133,8 +172,11 @@ forest-night:{
     top_column_color: #2E3B3B;
     alt_color_1: #4B5E5E;
     alt_color_2: #617C7C;
+    alt_color_3: #738D8D;
+    alt_color_4: #859E9E;
     background_color: #2E3B3B;
-    border_color: #9DBEBB;
+    border_color: #738D8D;
+    border_thickness: 1px;
     title_color: #9DBEBB;
     cell_text_color: #9DBEBB;
 }
@@ -143,8 +185,11 @@ vintage:{
     top_column_color: #A67F59;
     alt_color_1: #D9BF77;
     alt_color_2: #E0DDAA;
+    alt_color_3: #E5E3E0;
+    alt_color_4: #F4F1DE;
     background_color: #F4F1DE;
-    border_color: #C08497;
+    border_color: #E5E3E0;
+    border_thickness: 1px;
     title_color: #C08497;
     cell_text_color: #C08497;
 }
@@ -153,8 +198,11 @@ midnight-blue:{
     top_column_color: #003366;
     alt_color_1: #004080;
     alt_color_2: #0059B3;
+    alt_color_3: #0073E6;
+    alt_color_4: #3399FF;
     background_color: #001F3F;
-    border_color: #6699CC;
+    border_color: #0073E6;
+    border_thickness: 1px;
     title_color: #6699CC;
     cell_text_color: #6699CC;
 }
@@ -163,18 +211,102 @@ darcula:{
     top_column_color: #2B2B2B;
     alt_color_1: #3C3F41;
     alt_color_2: #4E5254;
+    alt_color_3: #6C757D;
+    alt_color_4: #A6A6A6;
     background_color: #2B2B2B;
-    border_color: #A9B7C6;
+    border_color: #6C757D;
+    border_thickness: 1px;
     title_color: #A9B7C6;
     cell_text_color: #A9B7C6;
+}
+zenburn:{
+    top_row_color: #3F3F3F;
+    top_column_color: #3F3F3F;
+    alt_color_1: #4F4F4F;
+    alt_color_2: #5F5F5F;
+    alt_color_3: #6F6F6F;
+    alt_color_4: #7F7F7F;
+    background_color: #3F3F3F;
+    border_color: #6F6F6F;
+    border_thickness: 1px;
+    title_color: #DCDCCC;
+    cell_text_color: #DCDCCC;
+}
+github:{
+    top_row_color: #F6F8FA;
+    top_column_color: #FFFFFF;
+    alt_color_1: #E1E4E8;
+    alt_color_2: #D1D5DA;
+    alt_color_3: #6A737D;
+    alt_color_4: #586069;
+    background_color: #FFFFFF;
+    border_color: #6A737D;
+    border_thickness: 1px;
+    title_color: #24292E;
+    cell_text_color: #24292E;
+}
+nord-light:{
+    top_row_color: #E5E9F0;
+    top_column_color: #ECEFF4;
+    alt_color_1: #D8DEE9;
+    alt_color_2: #E5E9F0;
+    alt_color_3: #A5AFC1;
+    alt_color_4: #B2BCC9;
+    background_color: #ECEFF4;
+    border_color: #A5AFC1;
+    border_thickness: 1px;
+    title_color: #2E3440;
+    cell_text_color: #2E3440;
+}
+grayscale-dark:{
+    top_row_color: #121212;
+    top_column_color: #212121;
+    alt_color_1: #2D2D2D;
+    alt_color_2: #3D3D3D;
+    alt_color_3: #4E4E4E;
+    alt_color_4: #606060;
+    background_color: #121212;
+    border_color: #4E4E4E;
+    border_thickness: 1px;
+    title_color: #9E9E9E;
+    cell_text_color: #9E9E9E;
+}
+aqua:{
+    top_row_color: #003333;
+    top_column_color: #003333;
+    alt_color_1: #004C4C;
+    alt_color_2: #006666;
+    alt_color_3: #009999;
+    alt_color_4: #33CCCC;
+    background_color: #003333;
+    border_color: #009999;
+    border_thickness: 1px;
+    title_color: #99FFFF;
+    cell_text_color: #99FFFF;
+}
+nord-dark:{
+    top_row_color: #2E3440;
+    top_column_color: #2E3440;
+    alt_color_1: #3B4252;
+    alt_color_2: #434C5E;
+    alt_color_3: #4C566A;
+    alt_color_4: #D8DEE9;
+    background_color: #2E3440;
+    border_color: #4C566A;
+    border_thickness: 1px;
+    title_color: #D8DEE9;
+    cell_text_color: #D8DEE9;
 }
 one-dark:{
     top_row_color: #282C34;
     top_column_color: #282C34;
     alt_color_1: #3E4451;
-    alt_color_2: #4B5363;
+    alt_color_2: #4B5263;
+    alt_color_3: #5C6370;
+    alt_color_4: #636D83;
     background_color: #282C34;
-    border_color: #ABB2BF;
+    border_color: #5C6370;
+    border_thickness: 1px;
     title_color: #ABB2BF;
     cell_text_color: #ABB2BF;
 }
@@ -182,10 +314,13 @@ night-owl:{
     top_row_color: #011627;
     top_column_color: #011627;
     alt_color_1: #0B253A;
-    alt_color_2: #112233;
+    alt_color_2: #112240;
+    alt_color_3: #1D2D50;
+    alt_color_4: #283B61;
     background_color: #011627;
-    border_color: #82AAFF;
-    title_color: #82AAFF;
+    border_color: #1D2D50;
+    border_thickness: 1px;
+    title_color: #D6DEEB;
     cell_text_color: #D6DEEB;
 }
 github-dark:{
@@ -193,8 +328,11 @@ github-dark:{
     top_column_color: #24292E;
     alt_color_1: #2F363D;
     alt_color_2: #3C444D;
+    alt_color_3: #444C56;
+    alt_color_4: #545D68;
     background_color: #24292E;
-    border_color: #636E7B;
+    border_color: #444C56;
+    border_thickness: 1px;
     title_color: #FFFFFF;
     cell_text_color: #C9D1D9;
 }
@@ -203,9 +341,12 @@ cobalt2:{
     top_column_color: #193549;
     alt_color_1: #263D53;
     alt_color_2: #31435E;
+    alt_color_3: #41607A;
+    alt_color_4: #517797;
     background_color: #193549;
-    border_color: #FFFFFF;
-    title_color: #FFFFFF;
+    border_color: #41607A;
+    border_thickness: 1px;
+    title_color: #A1EFE4;
     cell_text_color: #FFFFFF;
 }
 night-mode:{
@@ -213,8 +354,11 @@ night-mode:{
     top_column_color: #000000;
     alt_color_1: #1A1A1A;
     alt_color_2: #333333;
+    alt_color_3: #4D4D4D;
+    alt_color_4: #666666;
     background_color: #000000;
-    border_color: #666666;
+    border_color: #4D4D4D;
+    border_thickness: 1px;
     title_color: #FFFFFF;
     cell_text_color: #CCCCCC;
 }
@@ -223,180 +367,89 @@ iceberg-dark:{
     top_column_color: #161821;
     alt_color_1: #1E2132;
     alt_color_2: #272D40;
+    alt_color_3: #384259;
+    alt_color_4: #4A566E;
     background_color: #161821;
-    border_color: #A6B3CC;
-    title_color: #A6B3CC;
-    cell_text_color: #D8DEE9;
+    border_color: #384259;
+    border_thickness: 1px;
+    title_color: #A6ACCD;
+    cell_text_color: #A6ACCD;
 }
-dracula-pro:{
-    top_row_color: #282A36;
-    top_column_color: #282A36;
-    alt_color_1: #44475A;
-    alt_color_2: #6272A4;
-    background_color: #282A36;
-    border_color: #FF79C6;
-    title_color: #FF79C6;
-    cell_text_color: #F8F8F2;
+one-light:{
+    top_row_color: #FAFBFC;
+    top_column_color: #FFFFFF;
+    alt_color_1: #ECEEEF;
+    alt_color_2: #E1E4E8;
+    alt_color_3: #D1D5DA;
+    alt_color_4: #C6CBD1;
+    background_color: #FAFBFC;
+    border_color: #D1D5DA;
+    border_thickness: 1px;
+    title_color: #383A42;
+    cell_text_color: #383A42;
 }
-dark-plus:{
-    top_row_color: #1E1E1E;
-    top_column_color: #1E1E1E;
-    alt_color_1: #2D2D30;
-    alt_color_2: #3F3F46;
-    background_color: #1E1E1E;
-    border_color: #CCCCCC;
-    title_color: #FFFFFF;
-    cell_text_color: #D4D4D4;
+night-sky:{
+    top_row_color: #0B3D91;
+    top_column_color: #0B3D91;
+    alt_color_1: #1E40AF;
+    alt_color_2: #1C4B82;
+    alt_color_3: #283593;
+    alt_color_4: #3949AB;
+    background_color: #0B3D91;
+    border_color: #283593;
+    border_thickness: 1px;
+    title_color: #E2E8F0;
+    cell_text_color: #E2E8F0;
 }
-nord-dark:{
-    top_row_color: #2E3440;
-    top_column_color: #2E3440;
-    alt_color_1: #3B4252;
-    alt_color_2: #434C5E;
-    background_color: #2E3440;
-    border_color: #D8DEE9;
-    title_color: #D8DEE9;
-    cell_text_color: #ECEFF4;
+forest-green:{
+    top_row_color: #2C5F2D;
+    top_column_color: #2C5F2D;
+    alt_color_1: #476A34;
+    alt_color_2: #5C8D51;
+    alt_color_3: #74A074;
+    alt_color_4: #8CBF8C;
+    background_color: #2C5F2D;
+    border_color: #74A074;
+    border_thickness: 1px;
+    title_color: #D9EAD3;
+    cell_text_color: #D9EAD3;
 }
-solarized-dark:{
-    top_row_color: #073642;
-    top_column_color: #002B36;
-    alt_color_1: #586E75;
-    alt_color_2: #657B83;
-    background_color: #002B36;
-    border_color: #93A1A1;
-    title_color: #839496;
-    cell_text_color: #FFFFFF;
-}
-night-owl:{
-    top_row_color: #011627;
-    top_column_color: #011627;
-    alt_color_1: #0B253A;
-    alt_color_2: #112240;
-    background_color: #011627;
-    border_color: #5FB3B3;
-    title_color: #D6DEEB;
-    cell_text_color: #D6DEEB;
-}
-city-lights:{
-    top_row_color: #1D252C;
-    top_column_color: #1D252C;
-    alt_color_1: #2A3B4D;
-    alt_color_2: #344556;
-    background_color: #1D252C;
-    border_color: #5D81AC;
-    title_color: #DCE4EF;
-    cell_text_color: #DCE4EF;
-}
-cobalt2:{
-    top_row_color: #193549;
-    top_column_color: #193549;
-    alt_color_1: #283E4A;
-    alt_color_2: #374550;
-    background_color: #193549;
-    border_color: #A1EFE4;
-    title_color: #A1EFE4;
-    cell_text_color: #FFFFFF;
-}
-desert:{
-    top_row_color: #333333;
-    top_column_color: #333333;
-    alt_color_1: #4D4D4D;
-    alt_color_2: #666666;
-    background_color: #333333;
-    border_color: #D8CBB1;
-    title_color: #EDDCB2;
-    cell_text_color: #EDDCB2;
-}
-edge-light:{
-    top_row_color: #FAFAFA;
-    top_column_color: #FAFAFA;
-    alt_color_1: #F0F0F0;
-    alt_color_2: #E5E5E5;
-    background_color: #FAFAFA;
-    border_color: #B4B4B4;
-    title_color: #4B4B4B;
-    cell_text_color: #4B4B4B;
-}
-edge-dark:{
-    top_row_color: #1E1E28;
-    top_column_color: #1E1E28;
-    alt_color_1: #2C2C38;
-    alt_color_2: #3A3A4B;
-    background_color: #1E1E28;
-    border_color: #BBBBBB;
-    title_color: #CCCCCC;
-    cell_text_color: #CCCCCC;
-}
-flat-remix:{
+material-dark:{
     top_row_color: #212121;
-    top_column_color: #212121;
-    alt_color_1: #303030;
-    alt_color_2: #424242;
+    top_column_color: #303030;
+    alt_color_1: #424242;
+    alt_color_2: #616161;
+    alt_color_3: #757575;
+    alt_color_4: #9E9E9E;
     background_color: #212121;
-    border_color: #FF9800;
-    title_color: #FF9800;
-    cell_text_color: #FFFFFF;
+    border_color: #757575;
+    border_thickness: 1px;
+    title_color: #E0E0E0;
+    cell_text_color: #E0E0E0;
 }
-gotham:{
-    top_row_color: #0A0F14;
-    top_column_color: #0A0F14;
-    alt_color_1: #10151C;
-    alt_color_2: #131A22;
-    background_color: #0A0F14;
-    border_color: #2AA198;
-    title_color: #C7CCD1;
-    cell_text_color: #C7CCD1;
-}
-synthwave:{
-    top_row_color: #2A2139;
-    top_column_color: #2A2139;
-    alt_color_1: #3B3052;
-    alt_color_2: #4D4076;
-    background_color: #2A2139;
-    border_color: #FF79C6;
-    title_color: #FF79C6;
-    cell_text_color: #F8F8F2;
-}
-papercolor-light:{
-    top_row_color: #EEEEEE;
-    top_column_color: #EEEEEE;
-    alt_color_1: #FFFFFF;
-    alt_color_2: #F4F4F4;
-    background_color: #EEEEEE;
-    border_color: #CCCCCC;
-    title_color: #444444;
-    cell_text_color: #444444;
-}
-papercolor-dark:{
+soft-dark:{
     top_row_color: #1C1C1C;
     top_column_color: #1C1C1C;
-    alt_color_1: #262626;
-    alt_color_2: #303030;
+    alt_color_1: #2E2E2E;
+    alt_color_2: #3F3F3F;
+    alt_color_3: #515151;
+    alt_color_4: #646464;
     background_color: #1C1C1C;
-    border_color: #B4B4B4;
-    title_color: #B4B4B4;
-    cell_text_color: #EEEEEE;
-}
-high-contrast:{
-    top_row_color: #000000;
-    top_column_color: #000000;
-    alt_color_1: #1A1A1A;
-    alt_color_2: #333333;
-    background_color: #000000;
-    border_color: #FFFFFF;
-    title_color: #FFFFFF;
-    cell_text_color: #FFFFFF;
-}
-default:{
-    top_row_color: #F8D566;
-    top_column_color: #E4E2DF;
-    alt_color_1: #FFFBF0;
-    alt_color_2: #EFEBE3;
-    background_color: #FFFBF0;
-    cell_font_name: Avenir Next;
-    cell_text_color: black;
-    anti_alternating: false;
+    border_color: #515151;
     border_thickness: 1px;
-    border_color: black;
+    title_color: #D4D4D4;
+    cell_text_color: #D4D4D4;
+}
+vscode-dark:{
+    top_row_color: #1E1E1E;
+    top_column_color: #252526;
+    alt_color_1: #2D2D30;
+    alt_color_2: #3C3C3C;
+    alt_color_3: #4E4E4E;
+    alt_color_4: #5A5A5A;
+    background_color: #1E1E1E;
+    border_color: #4E4E4E;
+    border_thickness: 1px;
+    title_color: #CCCCCC;
+    cell_text_color: #CCCCCC;
 }

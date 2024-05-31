@@ -2,6 +2,8 @@ top_row_color: #F8D566;
 top_column_color: #E4E2DF;
 alt_color_1: #FFFBF0;
 alt_color_2: #EFEBE3;
+alt_color_3: black;
+alt_color_4: black;
 background_color: #FFFBF0;
 cell_font_name: Avenir Next;
 cell_text_color: black;
@@ -15,3 +17,4 @@ row_alternating: true;
 column_alternating: false;
 website_title: BetterCSV Website;
 custom_filename: output
+custom_input_filename: example

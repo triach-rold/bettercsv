@@ -116,6 +116,8 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes, defaul
     top_column_color = settings["top_column_color"]
     alt_color_1 = settings["alt_color_1"]
     alt_color_2 = settings["alt_color_2"]
+    alt_color_3 = settings["alt_color_3"]
+    alt_color_4 = settings["alt_color_4"]
     background_color = settings["background_color"]
     cell_font_name = settings["cell_font_name"]
     cell_text_color = settings["cell_text_color"]
@@ -151,6 +153,8 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes, defaul
                     --top-column-color: {top_column_color};
                     --alt-color-1: {alt_color_1};
                     --alt-color-2: {alt_color_2};
+                    --alt-color-3: {alt_color_3};
+                    --alt-color-4: {alt_color_4};
                     --cell-font-name: '{cell_font_name}';
                     --cell-text-color: {cell_text_color};
                     --border-color: {border_color};
@@ -216,7 +220,7 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes, defaul
             '''
             for theme in color_themes.keys():
                 html_content += f'<option value="{theme}">{theme}</option>'
-            html_content += '</select></div>'
+            html_content += '</select></div> <br>'
 
         html_content += '''
             <table>

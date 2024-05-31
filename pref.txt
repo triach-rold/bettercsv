@@ -6,4 +6,5 @@ default:{
 }
 
 user:{
+border_thickness :1px;
 }
