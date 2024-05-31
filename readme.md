@@ -61,3 +61,5 @@ parent_control_structure_name:{
 *Note- these features are planned or under review. There is no guarantee of them being added. If you have an implementation of any of these features that does not interfere with existing code and isn't buggy- submit a pull request.*
 
 * **css_injection_control_structure** - Control structure allowing for css injections in parts of code.
+* **JSON support** - Support for JSON files as imports.
+* **Website demo** - Website demo with GUI features to try out features.
