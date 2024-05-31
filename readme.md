@@ -34,3 +34,16 @@ General syntax is given as follows (doesn't apply to unspecified category)-
 ```
 // code goes here- no need to declare any specific control structure.
 ```
+
+## Alpha (currently buggy or straight-up unstable features)
+
+*Note- Bug reports for anything relating to this category are welcome, but will probably not be fixed anytime soon. Nothing here is there to stay and is expected to be unstable in production*
+
+* **Cell Specific Sub-control Structure** - Use this to specify cell specific settings according to the syntax - 
+``` 
+parent_control_structure_name:{
+    cell_specific(row_number)(column_number):{
+        // code goes here
+    }
+}
+```
