@@ -258,13 +258,14 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes, defaul
         '''
     with open(html_file_path, mode='w', encoding='utf-8') as htmlfile:
         htmlfile.write(html_content)
-
 pref_file_path = 'pref.txt'
 theme_file_path = 'colorthemes.txt'
 defaults_file_path = 'defaults.txt'
 csv_file_path = 'example.csv'
-html_file_path = 'output.html'
 default_preferences = read_defaults(defaults_file_path)
 preferences = read_preferences(pref_file_path)
+settings = {**default_preferences, **preferences}
+custom_filename=settings["custom_filename"]
+html_file_path = f'{custom_filename}.html'
 color_themes = read_color_themes(theme_file_path)
 csv_to_html(csv_file_path, html_file_path, preferences, color_themes, default_preferences)

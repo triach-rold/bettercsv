@@ -14,3 +14,4 @@ title_color: black;
 row_alternating: true;
 column_alternating: false;
 website_title: BetterCSV Website;
+custom_filename: output
