@@ -7,5 +7,4 @@ default:{
 
 user:{
 border_thickness :1px;
-column_banding: true;
 }
