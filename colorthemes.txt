@@ -396,7 +396,7 @@ default:{
     background_color: #FFFBF0;
     cell_font_name: Avenir Next;
     cell_text_color: black;
-        anti_alternating: false;
+    anti_alternating: false;
     border_thickness: 1px;
     border_color: black;
 }

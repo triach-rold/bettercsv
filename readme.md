@@ -22,6 +22,15 @@
 
 
 ## Currently Supported Control Structure Options - 
-
+General syntax is given as follows (doesn't apply to unspecified category)-
+```
+(control_structure_name):{
+    // insert code here
+}
+```
 * **default:** Default settings. A basic fall through in case user customization is faulty.
 * **user:** User specified settings. Takes preference (higher in hierarchy relative to default) over default.
+* **unspecified:** Declared differently than the other settings. Highest in hierarchy so that buggy code wouldn't derail the whole preference engine. Syntax- 
+```
+// code goes here- no need to declare any specific control structure.
+```
