@@ -7,8 +7,8 @@
 ### Currently Supported Customization Fields:
 * **top_row_color:** Sets the background color for the top (first row) row of the table.
 * **top_column_color:** Sets the background color for the cells in the top column (first column) of the table.
-* **alt_color_1:** Sets the background color for alternating rows (starting from the second row).
-* **alt_color_2:** Sets the background color for alternating rows (starting from the third row).
+* **alt_color_1:** Sets the background color for banding rows and other purposes (starting from the second row).
+* **alt_color_2:** Sets the background color for banding rows and other purposes (starting from the third row).
 * **background_color:** Sets the background color for the surrounding HTML page.
 * **cell_font_name:** Sets the font family for all cells in the table.
 * **border_thickness:** Sets the thickness of the cell borders in the table.
@@ -20,11 +20,11 @@
 * **switcher_font_size:** Sets the font size of the switcher text
 
 ### Currently Supported Customization Flags:
-* **anti_alternating:** If set to `true`, swaps the alternating row colors.
+* **anti_banding:** If set to `true`, swaps the banding row colors.
 * **title:** If set to `true`, a title is added above the table.
 * **switcher:** If set to `true`, a "color-switching" dropdown list is added below, allowing for fast color-switching. Optimal for websites open to the public.
-* **row_alternating:** If set to `true`, alternates the colors for rows.
-* **column_alternating:** If set to `true`, alternates the colors for columns.
+* **row_banding:** If set to `true`, alternates the colors for rows.
+* **column_banding:** If set to `true`, alternates the colors for columns.
 
 ## Currently Supported Control Structure Options - 
 General syntax is given as follows (doesn't apply to unspecified category)-
