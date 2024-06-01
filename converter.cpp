@@ -11,7 +11,7 @@ using namespace std;
 unordered_map<string, string> read_preferences(const string& file_path) {
     ifstream file(file_path);
     unordered_map<string, string> preferences;
-    unordered_map<int, unordered_map<int, unordered_map<string, string>>> cell_specific_styles;
+    unordered_map<int, unordered_map<int, unordered_map<string, string> > > cell_specific_styles;
     unordered_map<string, string> user_preferences;
     string line, mode, current_specifier;
     unordered_map<string, string> specific_styles;
@@ -27,8 +27,8 @@ unordered_map<string, string> read_preferences(const string& file_path) {
             continue;
         } else if (stripped_line == "}") {
             if (current_specifier.find("cell_specific") == 0) {
-                auto parts = current_specifier.substr(14, current_specifier.size() - 15);
-                auto delimiter = parts.find(',');
+                string parts = current_specifier.substr(14, current_specifier.size() - 15);
+                size_t delimiter = parts.find(',');
                 int row_number = stoi(parts.substr(0, delimiter));
                 int column_number = stoi(parts.substr(delimiter + 1));
                 cell_specific_styles[row_number][column_number] = specific_styles;
@@ -43,7 +43,7 @@ unordered_map<string, string> read_preferences(const string& file_path) {
                 current_specifier = stripped_line.substr(0, stripped_line.find(':'));
                 continue;
             }
-            auto delimiter = stripped_line.find(':');
+            size_t delimiter = stripped_line.find(':');
             string key = stripped_line.substr(0, delimiter);
             string value = stripped_line.substr(delimiter + 1);
             if (current_specifier.empty()) {
@@ -57,11 +57,11 @@ unordered_map<string, string> read_preferences(const string& file_path) {
         }
     }
     
-    for (const auto& row : cell_specific_styles) {
-        for (const auto& col : row.second) {
-            string cell_key = "cell_specific(" + to_string(row.first) + "," + to_string(col.first) + ")";
-            for (const auto& style : col.second) {
-                preferences[cell_key + ":" + style.first] = style.second;
+    for (unordered_map<int, unordered_map<int, unordered_map<string, string> > >::const_iterator row = cell_specific_styles.begin(); row != cell_specific_styles.end(); ++row) {
+        for (unordered_map<int, unordered_map<string, string> >::const_iterator col = row->second.begin(); col != row->second.end(); ++col) {
+            string cell_key = "cell_specific(" + to_string(row->first) + "," + to_string(col->first) + ")";
+            for (unordered_map<string, string>::const_iterator style = col->second.begin(); style != col->second.end(); ++style) {
+                preferences[cell_key + ":" + style->first] = style->second;
             }
         }
     }
@@ -70,21 +70,21 @@ unordered_map<string, string> read_preferences(const string& file_path) {
     return preferences;
 }
 
-unordered_map<string, unordered_map<string, string>> read_color_themes(const string& file_path) {
+unordered_map<string, unordered_map<string, string> > read_color_themes(const string& file_path) {
     ifstream file(file_path);
-    unordered_map<string, unordered_map<string, string>> color_themes;
+    unordered_map<string, unordered_map<string, string> > color_themes;
     string line, current_theme;
     
     while (getline(file, line)) {
         string stripped_line = line;
         stripped_line.erase(remove(stripped_line.begin(), stripped_line.end(), ' '), stripped_line.end());
-        if (stripped_line.ends_with(":{")) {
+        if (stripped_line.size() > 2 && stripped_line.substr(stripped_line.size() - 2) == ":{") {
             current_theme = stripped_line.substr(0, stripped_line.size() - 2);
             color_themes[current_theme] = unordered_map<string, string>();
         } else if (stripped_line == "}") {
             current_theme.clear();
         } else if (!current_theme.empty() && !stripped_line.empty() && stripped_line.find("//") != 0) {
-            auto delimiter = stripped_line.find(':');
+            size_t delimiter = stripped_line.find(':');
             string key = stripped_line.substr(0, delimiter);
             string value = stripped_line.substr(delimiter + 1);
             color_themes[current_theme][key] = value;
@@ -102,7 +102,7 @@ unordered_map<string, string> read_defaults(const string& file_path) {
         string stripped_line = line;
         stripped_line.erase(remove(stripped_line.begin(), stripped_line.end(), ' '), stripped_line.end());
         if (!stripped_line.empty() && stripped_line.find("//") != 0) {
-            auto delimiter = stripped_line.find(':');
+            size_t delimiter = stripped_line.find(':');
             string key = stripped_line.substr(0, delimiter);
             string value = stripped_line.substr(delimiter + 1);
             defaults[key] = value;
@@ -112,7 +112,7 @@ unordered_map<string, string> read_defaults(const string& file_path) {
 }
 
 string apply_specific_styles(const string& html_content, const unordered_map<string, string>& specific_styles, int row_index, int column_index) {
-    auto cell_key = "cell_specific(" + to_string(row_index) + "," + to_string(column_index) + ")";
+    string cell_key = "cell_specific(" + to_string(row_index) + "," + to_string(column_index) + ")";
     if (specific_styles.find(cell_key) != specific_styles.end()) {
         string style_string = specific_styles.at(cell_key);
         regex row_pattern("(<tr>.*?</tr>)");
@@ -132,7 +132,7 @@ string apply_specific_styles(const string& html_content, const unordered_map<str
     return html_content;
 }
 
-void csv_to_html(const string& csv_file_path, const string& html_file_path, const unordered_map<string, string>& preferences, const unordered_map<string, unordered_map<string, string>>& color_themes, const unordered_map<string, string>& default_preferences) {
+void csv_to_html(const string& csv_file_path, const string& html_file_path, const unordered_map<string, string>& preferences, const unordered_map<string, unordered_map<string, string> >& color_themes, const unordered_map<string, string>& default_preferences) {
     unordered_map<string, string> settings(default_preferences);
     settings.insert(preferences.begin(), preferences.end());
 
@@ -169,8 +169,8 @@ void csv_to_html(const string& csv_file_path, const string& html_file_path, cons
     }
 
     htmlfile << "<table><thead><tr>";
-    for (const auto& h : headers) {
-        htmlfile << "<th>" << h << "</th>";
+    for (vector<string>::const_iterator h = headers.begin(); h != headers.end(); ++h) {
+        htmlfile << "<th>" << *h << "</th>";
     }
     htmlfile << "</tr></thead><tbody>";
 
@@ -186,10 +186,7 @@ void csv_to_html(const string& csv_file_path, const string& html_file_path, cons
                 cell_style = "background-color:" + (row_index % 2 == 0 ? settings["alt_color_1"] : settings["alt_color_2"]) + ";";
             }
             if (settings["column_banding"] == "true") {
-                cell_style = "background-color:" + (column_index % 2 == 0 ? settings["alt_color_1"] : settings["alt_color_2"]) + ";";
-            }
-            if (settings["row_banding"] == "true" && settings["column_banding"] == "true") {
-                cell_style = "background-color:" + ((row_index + column_index) % 2 == 0 ? settings["alt_color_1"] : settings["alt_color_2"]) + ";";
+                cell_style = "background-color:" + (column_index % 2 == 0 ? settings["alt_color_3"] : settings["alt_color_4"]) + ";";
             }
             if (column_index == 0) {
                 cell_style = "background-color:" + settings["top_column_color"] + ";";
@@ -209,7 +206,7 @@ void csv_to_html(const string& csv_file_path, const string& html_file_path, cons
 
 int main(int argc, char* argv[]) {
     unordered_map<string, string> preferences, default_preferences;
-    unordered_map<string, unordered_map<string, string>> color_themes;
+    unordered_map<string, unordered_map<string, string> > color_themes;
     string csv_file_path, html_file_path, preferences_file_path, color_themes_file_path, default_preferences_file_path;
 
     int option;
@@ -235,6 +232,13 @@ int main(int argc, char* argv[]) {
                 return 1;
         }
     }
+
+    // Debug print statements
+    cout << "CSV file path: " << csv_file_path << endl;
+    cout << "HTML file path: " << html_file_path << endl;
+    cout << "Preferences file path: " << preferences_file_path << endl;
+    cout << "Color themes file path: " << color_themes_file_path << endl;
+    cout << "Default preferences file path: " << default_preferences_file_path << endl;
 
     if (!preferences_file_path.empty()) {
         preferences = read_preferences(preferences_file_path);
