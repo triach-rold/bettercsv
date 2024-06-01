@@ -5,16 +5,13 @@
 #include <vector>
 #include <string>
 #include <regex>
-#include <nlohmann/json.hpp>
-#include <argparse/argparse.hpp>
-
-using json = nlohmann::json;
+#include <getopt.h>
+#include <cstring>
 using namespace std;
-
 unordered_map<string, string> read_preferences(const string& file_path) {
     ifstream file(file_path);
     unordered_map<string, string> preferences;
-    unordered_map<string, unordered_map<int, unordered_map<int, unordered_map<string, string>>>> cell_specific_styles;
+    unordered_map<int, unordered_map<int, unordered_map<string, string>>> cell_specific_styles;
     unordered_map<string, string> user_preferences;
     string line, mode, current_specifier;
     unordered_map<string, string> specific_styles;
@@ -22,14 +19,14 @@ unordered_map<string, string> read_preferences(const string& file_path) {
     while (getline(file, line)) {
         string stripped_line = line;
         stripped_line.erase(remove(stripped_line.begin(), stripped_line.end(), ' '), stripped_line.end());
-        if (stripped_line.starts_with("default:{")) {
+        if (stripped_line.find("default:{") == 0) {
             mode = "default";
             continue;
-        } else if (stripped_line.starts_with("user:{")) {
+        } else if (stripped_line.find("user:{") == 0) {
             mode = "user";
             continue;
         } else if (stripped_line == "}") {
-            if (current_specifier.starts_with("cell_specific")) {
+            if (current_specifier.find("cell_specific") == 0) {
                 auto parts = current_specifier.substr(14, current_specifier.size() - 15);
                 auto delimiter = parts.find(',');
                 int row_number = stoi(parts.substr(0, delimiter));
@@ -41,8 +38,8 @@ unordered_map<string, string> read_preferences(const string& file_path) {
             mode.clear();
             continue;
         }
-        if (!stripped_line.empty() && !stripped_line.starts_with("//")) {
-            if (stripped_line.starts_with("cell_specific")) {
+        if (!stripped_line.empty() && stripped_line.find("//") != 0) {
+            if (stripped_line.find("cell_specific") == 0) {
                 current_specifier = stripped_line.substr(0, stripped_line.find(':'));
                 continue;
             }
@@ -60,10 +57,12 @@ unordered_map<string, string> read_preferences(const string& file_path) {
         }
     }
     
-    for (const auto& [row, columns] : cell_specific_styles) {
-        for (const auto& [column, styles] : columns) {
-            string cell_key = "cell_specific(" + to_string(row) + "," + to_string(column) + ")";
-            preferences[cell_key] = json(styles).dump();
+    for (const auto& row : cell_specific_styles) {
+        for (const auto& col : row.second) {
+            string cell_key = "cell_specific(" + to_string(row.first) + "," + to_string(col.first) + ")";
+            for (const auto& style : col.second) {
+                preferences[cell_key + ":" + style.first] = style.second;
+            }
         }
     }
 
@@ -84,7 +83,7 @@ unordered_map<string, unordered_map<string, string>> read_color_themes(const str
             color_themes[current_theme] = unordered_map<string, string>();
         } else if (stripped_line == "}") {
             current_theme.clear();
-        } else if (!current_theme.empty() && !stripped_line.empty() && !stripped_line.starts_with("//")) {
+        } else if (!current_theme.empty() && !stripped_line.empty() && stripped_line.find("//") != 0) {
             auto delimiter = stripped_line.find(':');
             string key = stripped_line.substr(0, delimiter);
             string value = stripped_line.substr(delimiter + 1);
@@ -102,7 +101,7 @@ unordered_map<string, string> read_defaults(const string& file_path) {
     while (getline(file, line)) {
         string stripped_line = line;
         stripped_line.erase(remove(stripped_line.begin(), stripped_line.end(), ' '), stripped_line.end());
-        if (!stripped_line.empty() && !stripped_line.starts_with("//")) {
+        if (!stripped_line.empty() && stripped_line.find("//") != 0) {
             auto delimiter = stripped_line.find(':');
             string key = stripped_line.substr(0, delimiter);
             string value = stripped_line.substr(delimiter + 1);
@@ -115,18 +114,7 @@ unordered_map<string, string> read_defaults(const string& file_path) {
 string apply_specific_styles(const string& html_content, const unordered_map<string, string>& specific_styles, int row_index, int column_index) {
     auto cell_key = "cell_specific(" + to_string(row_index) + "," + to_string(column_index) + ")";
     if (specific_styles.find(cell_key) != specific_styles.end()) {
-        json styles = json::parse(specific_styles.at(cell_key));
-        string style_string;
-        for (auto& [key, value] : styles.items()) {
-            if (key == "color") style_string += "background-color:" + value.get<string>() + ";";
-            if (key == "font") style_string += "font-family:" + value.get<string>() + ";";
-            if (key == "font_color") style_string += "color:" + value.get<string>() + ";";
-            if (key == "font_size") style_string += "font-size:" + value.get<string>() + ";";
-            if (key == "border_color") style_string += "border-color:" + value.get<string>() + ";";
-            if (key == "bold" && value == "true") style_string += "font-weight:bold;";
-            if (key == "italics" && value == "true") style_string += "font-style:italic;";
-            if (key == "strikethrough" && value == "true") style_string += "text-decoration:line-through;";
-        }
+        string style_string = specific_styles.at(cell_key);
         regex row_pattern("(<tr>.*?</tr>)");
         smatch row_match;
         if (regex_search(html_content, row_match, row_pattern)) {
@@ -176,62 +164,94 @@ void csv_to_html(const string& csv_file_path, const string& html_file_path, cons
     htmlfile << "--border-thickness: " << settings["border_thickness"] << ";";
     htmlfile << "}</style></head><body>";
 
-    if (settings["title"] == "true") htmlfile << "<h1 style=\"text-align:center;color:" << settings["title_color"] << ";\">" << settings["title_text"] << "</h1>";
-
-    if (settings["switcher"] == "true") {
-        htmlfile << "<div style=\"text-align:center;\"><label for=\"themeSwitcher\" style=\"font-family:" << settings["switcher_font"] << ";color:" << settings["switcher_color"] << ";font-size:" << settings["switcher_font_size"] << ";\">Select Color Theme:</label>";
-        htmlfile << "<select id=\"themeSwitcher\" onchange=\"changeTheme(this.value)\" style=\"font-family:" << settings["switcher_font"] << ";color:" << settings["switcher_color"] << ";font-size:" << settings["switcher_font_size"] << ";\">";
-        for (const auto& [theme, _] : color_themes) htmlfile << "<option value=\"" << theme << "\">" << theme << "</option>";
-        htmlfile << "</select></div><br>";
+    if (settings["title"] == "true") {
+        htmlfile << "<h1 style=\"color:" << settings["title_color"] << ";\">" << settings["title_text"] << "</h1>";
     }
 
     htmlfile << "<table><thead><tr>";
-    for (const auto& header : headers) htmlfile << "<th>" << header << "</th>";
+    for (const auto& h : headers) {
+        htmlfile << "<th>" << h << "</th>";
+    }
     htmlfile << "</tr></thead><tbody>";
 
     int row_index = 0;
     while (getline(csvfile, line)) {
-        row_index++;
         istringstream row_stream(line);
         string cell;
         int column_index = 0;
         htmlfile << "<tr>";
         while (getline(row_stream, cell, ',')) {
-            string cell_style = settings["row_banding"] == "true" ? (row_index % 2 == 1 ? "background-color:var(--alt-color-1);" : "background-color:var(--alt-color-2);") : "background-color:var(--alt-color-1);";
-            if (settings["column_banding"] == "true") cell_style = column_index % 2 == 1 ? "background-color:var(--alt-color-1);" : "background-color:var(--alt-color-2);";
-            if (settings["row_banding"] == "true" && settings["column_banding"] == "true") cell_style = (row_index + column_index) % 2 == 0 ? "background-color:var(--alt-color-1);" : "background-color:var(--alt-color-2);";
-            if (column_index == 0)
-                htmlfile << "<td style=\"background-color:var(--top-column-color);" << cell_style << "\">" << cell << "</td>";
-            else
-                htmlfile << "<td style=\"" << cell_style << "\">" << cell << "</td>";
+            string cell_style;
+            if (settings["row_banding"] == "true") {
+                cell_style = "background-color:" + (row_index % 2 == 0 ? settings["alt_color_1"] : settings["alt_color_2"]) + ";";
+            }
+            if (settings["column_banding"] == "true") {
+                cell_style = "background-color:" + (column_index % 2 == 0 ? settings["alt_color_1"] : settings["alt_color_2"]) + ";";
+            }
+            if (settings["row_banding"] == "true" && settings["column_banding"] == "true") {
+                cell_style = "background-color:" + ((row_index + column_index) % 2 == 0 ? settings["alt_color_1"] : settings["alt_color_2"]) + ";";
+            }
+            if (column_index == 0) {
+                cell_style = "background-color:" + settings["top_column_color"] + ";";
+            }
+            if (row_index == 0) {
+                cell_style = "background-color:" + settings["top_row_color"] + ";";
+            }
+            htmlfile << "<td style=\"" << cell_style << "\">" << cell << "</td>";
             column_index++;
         }
         htmlfile << "</tr>";
+        row_index++;
     }
+
     htmlfile << "</tbody></table></body></html>";
 }
 
-int main(int argc, char** argv) {
-    argparse::ArgumentParser program("csv_to_html");
+int main(int argc, char* argv[]) {
+    unordered_map<string, string> preferences, default_preferences;
+    unordered_map<string, unordered_map<string, string>> color_themes;
+    string csv_file_path, html_file_path, preferences_file_path, color_themes_file_path, default_preferences_file_path;
 
-    program.add_argument("input_csv").default_value(string("example.csv")).help("Input CSV file path");
-    program.add_argument("output_html").default_value(string("output.html")).help("Output HTML file path");
-    program.add_argument("pref_file").default_value(string("pref.txt")).help("Preferences file path");
-    program.add_argument("theme_file").default_value(string("colorthemes.txt")).help("Color themes file path");
-
-    try {
-        program.parse_args(argc, argv);
-    } catch (const std::runtime_error& err) {
-        cerr << err.what() << endl;
-        cerr << program;
-        exit(1);
+    int option;
+    while ((option = getopt(argc, argv, "c:o:p:t:d:")) != -1) {
+        switch (option) {
+            case 'c':
+                csv_file_path = optarg;
+                break;
+            case 'o':
+                html_file_path = optarg;
+                break;
+            case 'p':
+                preferences_file_path = optarg;
+                break;
+            case 't':
+                color_themes_file_path = optarg;
+                break;
+            case 'd':
+                default_preferences_file_path = optarg;
+                break;
+            default:
+                cerr << "Usage: " << argv[0] << " -c <csv_file> -o <html_file> -p <preferences_file> -t <color_themes_file> -d <default_preferences_file>\n";
+                return 1;
+        }
     }
 
-    auto default_preferences = read_defaults("defaults.txt");
-    auto preferences = read_preferences(program.get<string>("pref_file"));
-    auto color_themes = read_color_themes(program.get<string>("theme_file"));
+    if (!preferences_file_path.empty()) {
+        preferences = read_preferences(preferences_file_path);
+    }
+    if (!color_themes_file_path.empty()) {
+        color_themes = read_color_themes(color_themes_file_path);
+    }
+    if (!default_preferences_file_path.empty()) {
+        default_preferences = read_defaults(default_preferences_file_path);
+    }
 
-    csv_to_html(program.get<string>("input_csv"), program.get<string>("output_html"), preferences, color_themes, default_preferences);
+    if (!csv_file_path.empty() && !html_file_path.empty()) {
+        csv_to_html(csv_file_path, html_file_path, preferences, color_themes, default_preferences);
+    } else {
+        cerr << "CSV file path and HTML file path must be provided.\n";
+        return 1;
+    }
 
     return 0;
 }
