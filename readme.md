@@ -1,4 +1,4 @@
-# csv2html - A customizable and fast CSV to HTML converter.
+# betterCSV - A customizable and fast CSV to HTML converter.
 
 ## How do I customize my settings ?
 * **Step 1:** Create a new control structure (see below in docs) using the syntax `structureName:{}` in `pref.txt`.
