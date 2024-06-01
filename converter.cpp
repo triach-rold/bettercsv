@@ -7,104 +7,56 @@
 #include <regex>
 #include <getopt.h>
 #include <cstring>
-using namespace std;
-unordered_map<string, string> read_preferences(const string& file_path) {
-    ifstream file(file_path);
-    unordered_map<string, string> preferences;
-    unordered_map<int, unordered_map<int, unordered_map<string, string> > > cell_specific_styles;
-    unordered_map<string, string> user_preferences;
-    string line, mode, current_specifier;
-    unordered_map<string, string> specific_styles;
-    
-    while (getline(file, line)) {
-        string stripped_line = line;
-        stripped_line.erase(remove(stripped_line.begin(), stripped_line.end(), ' '), stripped_line.end());
-        if (stripped_line.find("default:{") == 0) {
-            mode = "default";
-            continue;
-        } else if (stripped_line.find("user:{") == 0) {
-            mode = "user";
-            continue;
-        } else if (stripped_line == "}") {
-            if (current_specifier.find("cell_specific") == 0) {
-                string parts = current_specifier.substr(14, current_specifier.size() - 15);
-                size_t delimiter = parts.find(',');
-                int row_number = stoi(parts.substr(0, delimiter));
-                int column_number = stoi(parts.substr(delimiter + 1));
-                cell_specific_styles[row_number][column_number] = specific_styles;
-            }
-            current_specifier.clear();
-            specific_styles.clear();
-            mode.clear();
-            continue;
-        }
-        if (!stripped_line.empty() && stripped_line.find("//") != 0) {
-            if (stripped_line.find("cell_specific") == 0) {
-                current_specifier = stripped_line.substr(0, stripped_line.find(':'));
-                continue;
-            }
-            size_t delimiter = stripped_line.find(':');
-            string key = stripped_line.substr(0, delimiter);
-            string value = stripped_line.substr(delimiter + 1);
-            if (current_specifier.empty()) {
-                if (mode == "default")
-                    preferences[key] = value;
-                else
-                    user_preferences[key] = value;
-            } else {
-                specific_styles[key] = value;
-            }
-        }
-    }
-    
-    for (unordered_map<int, unordered_map<int, unordered_map<string, string> > >::const_iterator row = cell_specific_styles.begin(); row != cell_specific_styles.end(); ++row) {
-        for (unordered_map<int, unordered_map<string, string> >::const_iterator col = row->second.begin(); col != row->second.end(); ++col) {
-            string cell_key = "cell_specific(" + to_string(row->first) + "," + to_string(col->first) + ")";
-            for (unordered_map<string, string>::const_iterator style = col->second.begin(); style != col->second.end(); ++style) {
-                preferences[cell_key + ":" + style->first] = style->second;
-            }
-        }
-    }
 
-    preferences.insert(user_preferences.begin(), user_preferences.end());
+using namespace std;
+
+unordered_map<string, string> read_preferences(const string& file_path) {
+    unordered_map<string, string> preferences;
+    ifstream file(file_path);
+    string line;
+    while (getline(file, line)) {
+        size_t delimiter = line.find(':');
+        if (delimiter != string::npos) {
+            string key = line.substr(0, delimiter);
+            string value = line.substr(delimiter + 1);
+            preferences[key] = value;
+        }
+    }
     return preferences;
 }
 
 unordered_map<string, unordered_map<string, string> > read_color_themes(const string& file_path) {
-    ifstream file(file_path);
     unordered_map<string, unordered_map<string, string> > color_themes;
+    ifstream file(file_path);
     string line, current_theme;
-    
     while (getline(file, line)) {
-        string stripped_line = line;
-        stripped_line.erase(remove(stripped_line.begin(), stripped_line.end(), ' '), stripped_line.end());
-        if (stripped_line.size() > 2 && stripped_line.substr(stripped_line.size() - 2) == ":{") {
-            current_theme = stripped_line.substr(0, stripped_line.size() - 2);
-            color_themes[current_theme] = unordered_map<string, string>();
-        } else if (stripped_line == "}") {
-            current_theme.clear();
-        } else if (!current_theme.empty() && !stripped_line.empty() && stripped_line.find("//") != 0) {
-            size_t delimiter = stripped_line.find(':');
-            string key = stripped_line.substr(0, delimiter);
-            string value = stripped_line.substr(delimiter + 1);
-            color_themes[current_theme][key] = value;
+        line = regex_replace(line, regex("^\\s+|\\s+$"), "");
+        if (line.empty() || line[0] == '#') continue;
+        if (line.find(":{") != string::npos) {
+            current_theme = line.substr(0, line.size() - 2);
+        } else if (line == "}") {
+            current_theme = "";
+        } else if (!current_theme.empty()) {
+            size_t delimiter = line.find(':');
+            if (delimiter != string::npos) {
+                string key = line.substr(0, delimiter);
+                string value = line.substr(delimiter + 1);
+                color_themes[current_theme][key] = value;
+            }
         }
     }
     return color_themes;
 }
 
 unordered_map<string, string> read_defaults(const string& file_path) {
-    ifstream file(file_path);
     unordered_map<string, string> defaults;
+    ifstream file(file_path);
     string line;
-    
     while (getline(file, line)) {
-        string stripped_line = line;
-        stripped_line.erase(remove(stripped_line.begin(), stripped_line.end(), ' '), stripped_line.end());
-        if (!stripped_line.empty() && stripped_line.find("//") != 0) {
-            size_t delimiter = stripped_line.find(':');
-            string key = stripped_line.substr(0, delimiter);
-            string value = stripped_line.substr(delimiter + 1);
+        size_t delimiter = line.find(':');
+        if (delimiter != string::npos) {
+            string key = line.substr(0, delimiter);
+            string value = line.substr(delimiter + 1);
             defaults[key] = value;
         }
     }
@@ -112,96 +64,60 @@ unordered_map<string, string> read_defaults(const string& file_path) {
 }
 
 string apply_specific_styles(const string& html_content, const unordered_map<string, string>& specific_styles, int row_index, int column_index) {
+    string styled_html = html_content;
     string cell_key = "cell_specific(" + to_string(row_index) + "," + to_string(column_index) + ")";
-    if (specific_styles.find(cell_key) != specific_styles.end()) {
-        string style_string = specific_styles.at(cell_key);
-        regex row_pattern("(<tr>.*?</tr>)");
-        smatch row_match;
-        if (regex_search(html_content, row_match, row_pattern)) {
-            string row = row_match.str(row_index);
-            regex cell_pattern("(<td[^>]*>(?:(?!</td>).)*</td>)");
-            smatch cell_match;
-            if (regex_search(row, cell_match, cell_pattern)) {
-                string cell = cell_match.str(column_index);
-                string replacement = regex_replace(cell, regex("<td"), "<td style=\"" + style_string + "\"");
-                string new_row = regex_replace(row, regex(cell), replacement);
-                return regex_replace(html_content, regex(row), new_row);
-            }
+    unordered_map<string, string>::const_iterator it = specific_styles.find(cell_key);
+    if (it != specific_styles.end()) {
+        string style_tag = "style=\"" + it->second + "\"";
+        size_t pos = styled_html.find("<td>");
+        if (pos != string::npos) {
+            styled_html.insert(pos + 4, style_tag + " ");
         }
     }
-    return html_content;
+    return styled_html;
 }
 
 void csv_to_html(const string& csv_file_path, const string& html_file_path, const unordered_map<string, string>& preferences, const unordered_map<string, unordered_map<string, string> >& color_themes, const unordered_map<string, string>& default_preferences) {
-    unordered_map<string, string> settings(default_preferences);
-    settings.insert(preferences.begin(), preferences.end());
+    ifstream csv_file(csv_file_path);
+    ofstream html_file(html_file_path);
 
-    string selected_theme = settings["colortheme"];
-    if (!selected_theme.empty() && color_themes.find(selected_theme) != color_themes.end()) {
-        settings.insert(color_themes.at(selected_theme).begin(), color_themes.at(selected_theme).end());
-    }
-
-    ifstream csvfile(csv_file_path);
     string line;
-    getline(csvfile, line);
-    istringstream header_stream(line);
     vector<string> headers;
-    string header;
-    while (getline(header_stream, header, ',')) headers.push_back(header);
-
-    ofstream htmlfile(html_file_path);
-    htmlfile << "<html lang=\"en\"><head><title>" << settings["website_title"] << "</title><style>:root {";
-    htmlfile << "--background-color: " << settings["background_color"] << ";";
-    htmlfile << "--top-row-color: " << settings["top_row_color"] << ";";
-    htmlfile << "--top-column-color: " << settings["top_column_color"] << ";";
-    htmlfile << "--alt-color-1: " << settings["alt_color_1"] << ";";
-    htmlfile << "--alt-color-2: " << settings["alt_color_2"] << ";";
-    htmlfile << "--alt-color-3: " << settings["alt_color_3"] << ";";
-    htmlfile << "--alt-color-4: " << settings["alt_color_4"] << ";";
-    htmlfile << "--cell-font-name: '" << settings["cell_font_name"] << "';";
-    htmlfile << "--cell-text-color: " << settings["cell_text_color"] << ";";
-    htmlfile << "--border-color: " << settings["border_color"] << ";";
-    htmlfile << "--border-thickness: " << settings["border_thickness"] << ";";
-    htmlfile << "}</style></head><body>";
-
-    if (settings["title"] == "true") {
-        htmlfile << "<h1 style=\"color:" << settings["title_color"] << ";\">" << settings["title_text"] << "</h1>";
+    if (getline(csv_file, line)) {
+        stringstream ss(line);
+        string header;
+        while (getline(ss, header, ',')) {
+            headers.push_back(header);
+        }
     }
 
-    htmlfile << "<table><thead><tr>";
-    for (vector<string>::const_iterator h = headers.begin(); h != headers.end(); ++h) {
-        htmlfile << "<th>" << *h << "</th>";
+    html_file << "<html lang=\"en\"><head><title></title><style>:root {";
+    unordered_map<string, string>::const_iterator it;
+    for (it = default_preferences.begin(); it != default_preferences.end(); ++it) {
+        html_file << "--" << it->first << ": " << it->second << ";";
     }
-    htmlfile << "</tr></thead><tbody>";
+    html_file << "}</style></head><body><table><thead><tr>";
+    for (vector<string>::const_iterator header_it = headers.begin(); header_it != headers.end(); ++header_it) {
+        html_file << "<th>" << *header_it << "</th>";
+    }
+    html_file << "</tr></thead><tbody>\n";
 
     int row_index = 0;
-    while (getline(csvfile, line)) {
-        istringstream row_stream(line);
+    while (getline(csv_file, line)) {
+        stringstream ss(line);
         string cell;
+        html_file << "<tr>";
         int column_index = 0;
-        htmlfile << "<tr>";
-        while (getline(row_stream, cell, ',')) {
-            string cell_style;
-            if (settings["row_banding"] == "true") {
-                cell_style = "background-color:" + (row_index % 2 == 0 ? settings["alt_color_1"] : settings["alt_color_2"]) + ";";
-            }
-            if (settings["column_banding"] == "true") {
-                cell_style = "background-color:" + (column_index % 2 == 0 ? settings["alt_color_3"] : settings["alt_color_4"]) + ";";
-            }
-            if (column_index == 0) {
-                cell_style = "background-color:" + settings["top_column_color"] + ";";
-            }
-            if (row_index == 0) {
-                cell_style = "background-color:" + settings["top_row_color"] + ";";
-            }
-            htmlfile << "<td style=\"" << cell_style << "\">" << cell << "</td>";
+        while (getline(ss, cell, ',')) {
+            string cell_html = "<td>" + cell + "</td>";
+            cell_html = apply_specific_styles(cell_html, default_preferences, row_index, column_index);
+            html_file << cell_html;
             column_index++;
         }
-        htmlfile << "</tr>";
+        html_file << "</tr>\n";
         row_index++;
     }
-
-    htmlfile << "</tbody></table></body></html>";
+    html_file << "</tbody></table></body></html>";
 }
 
 int main(int argc, char* argv[]) {
