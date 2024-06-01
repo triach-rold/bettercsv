@@ -110,7 +110,18 @@ void csv_to_html(const string& csv_file_path, const string& html_file_path, cons
         int column_index = 0;
         while (getline(ss, cell, ',')) {
             string cell_html = "<td>" + cell + "</td>";
-            cell_html = apply_specific_styles(cell_html, default_preferences, row_index, column_index);
+            // Apply specific styles
+            string cell_key = "cell_specific(" + to_string(row_index) + "," + to_string(column_index) + ")";
+            unordered_map<string, string> specific_styles;
+            if (color_themes.find(cell_key) != color_themes.end()) {
+                specific_styles = color_themes.at(cell_key);
+            }
+            for (const auto& [key, value] : preferences) {
+                specific_styles[key] = value;
+            }
+            for (const auto& [key, value] : specific_styles) {
+                cell_html = regex_replace(cell_html, regex("<td>"), "<td style=\"" + key + ": " + value + "\">");
+            }
             html_file << cell_html;
             column_index++;
         }
@@ -119,6 +130,7 @@ void csv_to_html(const string& csv_file_path, const string& html_file_path, cons
     }
     html_file << "</tbody></table></body></html>";
 }
+
 
 int main(int argc, char* argv[]) {
     unordered_map<string, string> preferences, default_preferences;
