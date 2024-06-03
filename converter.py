@@ -2,69 +2,78 @@ import csv
 import re
 import json
 import argparse
-def read_preferences(pref_file_path):
+def read_preferences(pref_file_path, is_json=False):
     preferences = {}
     cell_specific_styles = {}
     user_preferences = {}
-    with open(pref_file_path, 'r', encoding='utf-8') as pref_file:
-        mode = None
-        current_specifier = None
-        specific_styles = {}
-        for line in pref_file:
-            stripped_line = line.strip()
-            if stripped_line.startswith('default:{'):
-                mode = 'default'
-                continue
-            elif stripped_line.startswith('user:{'):
-                mode = 'user'
-                continue
-            elif stripped_line == '}':
-                if current_specifier and 'cell_specific' in current_specifier:
-                    parts = current_specifier.split('(')[1].split(')')[0].split(',')
-                    if len(parts) == 2:
-                        row_number = int(parts[0])
-                        column_number = int(parts[1])
-                        if row_number not in cell_specific_styles:
-                            cell_specific_styles[row_number] = {}
-                        cell_specific_styles[row_number][column_number] = specific_styles
-                current_specifier = None
-                specific_styles = {}
-                mode = None
-                continue
-            if stripped_line and not stripped_line.startswith('//'):
-                if stripped_line.startswith('cell_specific'):
-                    current_specifier = stripped_line.split(':')[0].strip()
+    if is_json:
+        with open(pref_file_path, 'r', encoding='utf-8') as pref_file:
+            data = json.load(pref_file)
+            preferences = data.get('default', {})
+            user_preferences = data.get('user', {})
+            cell_specific_styles = data.get('cell_specific', {})
+    else:
+        with open(pref_file_path, 'r', encoding='utf-8') as pref_file:
+            mode = None
+            current_specifier = None
+            specific_styles = {}
+            for line in pref_file:
+                stripped_line = line.strip()
+                if stripped_line.startswith('default:{'):
+                    mode = 'default'
                     continue
-                if current_specifier:
-                    key, value = stripped_line.split(':')
-                    specific_styles[key.strip()] = value.strip().rstrip(';')
-                else:
-                    key, value = stripped_line.split(':')
-                    if mode == 'default':
-                        preferences[key.strip()] = value.strip().rstrip(';')
+                elif stripped_line.startswith('user:{'):
+                    mode = 'user'
+                    continue
+                elif stripped_line == '}':
+                    if current_specifier and 'cell_specific' in current_specifier:
+                        parts = current_specifier.split('(')[1].split(')')[0].split(',')
+                        if len(parts) == 2:
+                            row_number = int(parts[0])
+                            column_number = int(parts[1])
+                            if row_number not in cell_specific_styles:
+                                cell_specific_styles[row_number] = {}
+                            cell_specific_styles[row_number][column_number] = specific_styles
+                    current_specifier = None
+                    specific_styles = {}
+                    mode = None
+                    continue
+                if stripped_line and not stripped_line.startswith('//'):
+                    if stripped_line.startswith('cell_specific'):
+                        current_specifier = stripped_line.split(':')[0].strip()
+                        continue
+                    if current_specifier:
+                        key, value = stripped_line.split(':')
+                        specific_styles[key.strip()] = value.strip().rstrip(';')
                     else:
-                        user_preferences[key.strip()] = value.strip().rstrip(';')
+                        key, value = stripped_line.split(':')
+                        if mode == 'default':
+                            preferences[key.strip()] = value.strip().rstrip(';')
+                        else:
+                            user_preferences[key.strip()] = value.strip().rstrip(';')
 
     preferences['cell_specific'] = cell_specific_styles
     preferences.update(user_preferences)
     return preferences
-
-def read_color_themes(theme_file_path):
+def read_color_themes(theme_file_path, is_json=False):
     color_themes = {}
-    with open(theme_file_path, 'r', encoding='utf-8') as theme_file:
-        current_theme = None
-        for line in theme_file:
-            stripped_line = line.strip()
-            if stripped_line.endswith(':{'):
-                current_theme = stripped_line[:-2]
-                color_themes[current_theme] = {}
-            elif stripped_line == '}':
-                current_theme = None
-            elif current_theme and stripped_line and not stripped_line.startswith('//'):
-                key, value = stripped_line.split(':')
-                color_themes[current_theme][key.strip()] = value.strip().rstrip(';')
+    if is_json:
+        with open(theme_file_path, 'r', encoding='utf-8') as theme_file:
+            color_themes = json.load(theme_file)
+    else:
+        with open(theme_file_path, 'r', encoding='utf-8') as theme_file:
+            current_theme = None
+            for line in theme_file:
+                stripped_line = line.strip()
+                if stripped_line.endswith(':{'):
+                    current_theme = stripped_line[:-2]
+                    color_themes[current_theme] = {}
+                elif stripped_line == '}':
+                    current_theme = None
+                elif current_theme and stripped_line and not stripped_line.startswith('//'):
+                    key, value = stripped_line.split(':')
+                    color_themes[current_theme][key.strip()] = value.strip().rstrip(';')
     return color_themes
-
 def read_defaults(defaults_file_path):
     defaults = {}
     with open(defaults_file_path, 'r', encoding='utf-8') as defaults_file:
@@ -272,10 +281,12 @@ def main():
     parser.add_argument('output_html', nargs='?', default='output.html', help='Output HTML file path')
     parser.add_argument('pref_file', nargs='?', default='pref.txt', help='Preferences file path')
     parser.add_argument('theme_file', nargs='?', default='colorthemes.txt', help='Color themes file path')
+    parser.add_argument('--json', action='store_true', help='Specify if the preferences and themes are in JSON format')
     args = parser.parse_args()
+
     default_preferences = read_defaults('defaults.txt')
-    preferences = read_preferences(args.pref_file)
-    color_themes = read_color_themes(args.theme_file)
+    preferences = read_preferences(args.pref_file, args.json)
+    color_themes = read_color_themes(args.theme_file, args.json)
     csv_to_html(args.input_csv, args.output_html, preferences, color_themes, default_preferences)
 if __name__ == '__main__':
     main()
