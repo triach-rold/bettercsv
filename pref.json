@@ -1,0 +1,30 @@
+{
+    "default": {
+      "colortheme": "dark",
+      "top_row_color": "#ffffff",
+      "top_column_color": "#ffffff",
+      "alt_color_1": "#f2f2f2",
+      "alt_color_2": "#ffffff",
+      "background_color": "#ffffff",
+      "cell_font_name": "Futura",
+      "cell_text_color": "#000000",
+      "border_color": "#000000",
+      "border_thickness": "1px",
+      "anti_banding": "false",
+      "title": "false",
+      "title_text": "CSV Data",
+      "title_color": "#000000",
+      "website_title": "CSV Data",
+      "row_banding": "true",
+      "column_banding": "false",
+      "switcher": "false",
+      "switcher_font": "Arial",
+      "switcher_color": "#000000",
+      "switcher_font_size": "14px"
+    },
+    "user": {
+      "colortheme": "dark",
+      "switcher" : "true"
+    }
+  }
+  
