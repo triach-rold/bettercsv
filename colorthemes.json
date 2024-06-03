@@ -1,0 +1,25 @@
+{
+    "default": {
+      "background_color": "#ffffff",
+      "top_row_color": "#dddddd",
+      "top_column_color": "#dddddd",
+      "alt_color_1": "#f2f2f2",
+      "alt_color_2": "#ffffff",
+      "cell_font_name": "Arial",
+      "cell_text_color": "#000000",
+      "border_color": "#000000",
+      "border_thickness": "1px"
+    },
+    "dark": {
+      "background_color": "#333333",
+      "top_row_color": "#444444",
+      "top_column_color": "#444444",
+      "alt_color_1": "#555555",
+      "alt_color_2": "#666666",
+      "cell_font_name": "Arial",
+      "cell_text_color": "#ffffff",
+      "border_color": "#ffffff",
+      "border_thickness": "1px"
+    }
+  }
+  
