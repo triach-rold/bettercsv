@@ -60,6 +60,7 @@ def read_preferences(pref_file_path, is_json=False):
     return preferences
 def read_color_themes(theme_file_path, is_json=False):
     color_themes = {}
+    
     if is_json:
         with open(theme_file_path, 'r', encoding='utf-8') as theme_file:
             color_themes = json.load(theme_file)
@@ -74,18 +75,10 @@ def read_color_themes(theme_file_path, is_json=False):
                 elif stripped_line == '}':
                     current_theme = None
                 elif current_theme and stripped_line and not stripped_line.startswith('//'):
-                    key, value = stripped_line.split(':')
-                    color_themes[current_theme][key.strip()] = value.strip().rstrip(';')
+                    if ':' in stripped_line:
+                        key, value = stripped_line.split(':', 1)
+                        color_themes[current_theme][key.strip()] = value.strip().rstrip(';')
     return color_themes
-def read_defaults(defaults_file_path):
-    defaults = {}
-    with open(defaults_file_path, 'r', encoding='utf-8') as defaults_file:
-        for line in defaults_file:
-            stripped_line = line.strip()
-            if stripped_line and not stripped_line.startswith('//'):
-                key, value = stripped_line.split(':')
-                defaults[key.strip()] = value.strip().rstrip(';')
-    return defaults
 
 def apply_specific_styles(html_content, specific_styles, row_index, column_index):
     if row_index in specific_styles and column_index in specific_styles[row_index]:
