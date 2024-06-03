@@ -6,12 +6,13 @@ def read_preferences(pref_file_path, is_json=False):
     preferences = {}
     cell_specific_styles = {}
     user_preferences = {}
+    
     if is_json:
         with open(pref_file_path, 'r', encoding='utf-8') as pref_file:
             data = json.load(pref_file)
-            preferences = data.get('default', {})
-            user_preferences = data.get('user', {})
-            cell_specific_styles = data.get('cell_specific', {})
+            preferences.update(data.get("default", {}))
+            user_preferences.update(data.get("user", {}))
+            cell_specific_styles.update(data.get("cell_specific", {}))
     else:
         with open(pref_file_path, 'r', encoding='utf-8') as pref_file:
             mode = None
@@ -43,14 +44,16 @@ def read_preferences(pref_file_path, is_json=False):
                         current_specifier = stripped_line.split(':')[0].strip()
                         continue
                     if current_specifier:
-                        key, value = stripped_line.split(':')
-                        specific_styles[key.strip()] = value.strip().rstrip(';')
+                        if ':' in stripped_line:
+                            key, value = stripped_line.split(':', 1)
+                            specific_styles[key.strip()] = value.strip().rstrip(';')
                     else:
-                        key, value = stripped_line.split(':')
-                        if mode == 'default':
-                            preferences[key.strip()] = value.strip().rstrip(';')
-                        else:
-                            user_preferences[key.strip()] = value.strip().rstrip(';')
+                        if ':' in stripped_line:
+                            key, value = stripped_line.split(':', 1)
+                            if mode == 'default':
+                                preferences[key.strip()] = value.strip().rstrip(';')
+                            else:
+                                user_preferences[key.strip()] = value.strip().rstrip(';')
 
     preferences['cell_specific'] = cell_specific_styles
     preferences.update(user_preferences)
