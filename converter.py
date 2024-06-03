@@ -8,11 +8,15 @@ def read_preferences(pref_file_path, is_json=False):
     user_preferences = {}
     
     if is_json:
-        with open(pref_file_path, 'r', encoding='utf-8') as pref_file:
-            data = json.load(pref_file)
-            preferences.update(data.get("default", {}))
-            user_preferences.update(data.get("user", {}))
-            cell_specific_styles.update(data.get("cell_specific", {}))
+        try:
+            with open(pref_file_path, 'r', encoding='utf-8') as pref_file:
+                data = json.load(pref_file)
+                preferences.update(data.get("default", {}))
+                user_preferences.update(data.get("user", {}))
+                cell_specific_styles.update(data.get("cell_specific", {}))
+        except json.JSONDecodeError as e:
+            print(f"Error reading JSON preferences file: {e}")
+            return {}
     else:
         with open(pref_file_path, 'r', encoding='utf-8') as pref_file:
             mode = None
@@ -62,8 +66,12 @@ def read_color_themes(theme_file_path, is_json=False):
     color_themes = {}
     
     if is_json:
-        with open(theme_file_path, 'r', encoding='utf-8') as theme_file:
-            color_themes = json.load(theme_file)
+        try:
+            with open(theme_file_path, 'r', encoding='utf-8') as theme_file:
+                color_themes = json.load(theme_file)
+        except json.JSONDecodeError as e:
+            print(f"Error reading JSON color themes file: {e}")
+            return {}
     else:
         with open(theme_file_path, 'r', encoding='utf-8') as theme_file:
             current_theme = None
@@ -79,6 +87,15 @@ def read_color_themes(theme_file_path, is_json=False):
                         key, value = stripped_line.split(':', 1)
                         color_themes[current_theme][key.strip()] = value.strip().rstrip(';')
     return color_themes
+def read_defaults(defaults_file_path):
+    defaults = {}
+    with open(defaults_file_path, 'r', encoding='utf-8') as defaults_file:
+        for line in defaults_file:
+            stripped_line = line.strip()
+            if stripped_line and not stripped_line.startswith('//'):
+                key, value = stripped_line.split(':')
+                defaults[key.strip()] = value.strip().rstrip(';')
+    return defaults
 
 def apply_specific_styles(html_content, specific_styles, row_index, column_index):
     if row_index in specific_styles and column_index in specific_styles[row_index]:
@@ -284,5 +301,6 @@ def main():
     preferences = read_preferences(args.pref_file, args.json)
     color_themes = read_color_themes(args.theme_file, args.json)
     csv_to_html(args.input_csv, args.output_html, preferences, color_themes, default_preferences)
+
 if __name__ == '__main__':
     main()
