@@ -1,26 +1,4 @@
 {
-    "default": {
-      "background_color": "#ffffff",
-      "top_row_color": "#dddddd",
-      "top_column_color": "#dddddd",
-      "alt_color_1": "#f2f2f2",
-      "alt_color_2": "#ffffff",
-      "cell_font_name": "Arial",
-      "cell_text_color": "#000000",
-      "border_color": "#000000",
-      "border_thickness": "1px"
-    },
-    "dark": {
-      "background_color": "#333333",
-      "top_row_color": "#444444",
-      "top_column_color": "#444444",
-      "alt_color_1": "#555555",
-      "alt_color_2": "#666666",
-      "cell_font_name": "Arial",
-      "cell_text_color": "#ffffff",
-      "border_color": "#ffffff",
-      "border_thickness": "1px"
-    },
     "dracula": {
       "top_row_color": "#282A36",
       "top_column_color": "#282A36",
@@ -187,34 +165,8 @@
       "background_color": "#101820",
       "border_color": "#5C6881",
       "border_thickness": "1px",
-      "title_color": "#F2AA4C",
-      "cell_text_color": "#F2AA4C"
-    },
-    "forest-night": {
-      "top_row_color": "#2E3B3B",
-      "top_column_color": "#2E3B3B",
-      "alt_color_1": "#4B5E5E",
-      "alt_color_2": "#617C7C",
-      "alt_color_3": "#738D8D",
-      "alt_color_4": "#859E9E",
-      "background_color": "#2E3B3B",
-      "border_color": "#738D8D",
-      "border_thickness": "1px",
-      "title_color": "#9DBEBB",
-      "cell_text_color": "#9DBEBB"
-    },
-    "vintage": {
-      "top_row_color": "#A67F59",
-      "top_column_color": "#A67F59",
-      "alt_color_1": "#D9BF77",
-      "alt_color_2": "#E0DDAA",
-      "alt_color_3": "#E5E5E5",
-      "alt_color_4": "#F2E0D0",
-      "background_color": "#A67F59",
-      "border_color": "#E5E5E5",
-      "border_thickness": "1px",
-      "title_color": "#3B2F2F",
-      "cell_text_color": "#3B2F2F"
+      "title_color": "#D9D7CE",
+      "cell_text_color": "#D9D7CE"
     },
     "catppuccin": {
       "top_row_color": "#1E1E28",
@@ -230,3 +182,4 @@
       "cell_text_color": "#F5E0DC"
     }
   }
+  

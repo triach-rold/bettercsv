@@ -23,7 +23,7 @@
       "switcher_font_size": "14px"
     },
     "user": {
-      "colortheme": "dark",
+      "colortheme": "dracula",
       "switcher" : "true"
     }
   }
