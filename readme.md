@@ -55,11 +55,12 @@ parent_control_structure_name:{
     }
 }
 ```
+* **C++ Port** - Highly unstable and buggy. Will straight up not work in current versions. JSON support is non-existent for the C++ port. Might be scrapped. Preference commands are ignored.
 
 ## Planned features (features under consideration/review):
 
 *Note- these features are planned or under review. There is no guarantee of them being added. If you have an implementation of any of these features that does not interfere with existing code and isn't buggy- submit a pull request.*
 
-* **css_injection_control_structure** - Control structure allowing for css injections in parts of code.
-* **JSON support** - Support for JSON files as imports.
-* **Website demo** - Website demo with GUI features to try out features.
+- [ ] **CSS Support/Injection** - Support for CSS Injections in preference files.
+- [x] **JSON support** - Support for JSON files as imports. `Completed in bb084f2.`
+- [ ] **Website demo** - Website demo with GUI features to try out features.

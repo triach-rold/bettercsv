@@ -7,9 +7,7 @@
 #include <regex>
 #include <getopt.h>
 #include <cstring>
-
 using namespace std;
-
 unordered_map<string, string> read_preferences(const string& file_path) {
     unordered_map<string, string> preferences;
     ifstream file(file_path);
@@ -24,7 +22,6 @@ unordered_map<string, string> read_preferences(const string& file_path) {
     }
     return preferences;
 }
-
 unordered_map<string, unordered_map<string, string> > read_color_themes(const string& file_path) {
     unordered_map<string, unordered_map<string, string> > color_themes;
     ifstream file(file_path);
@@ -110,7 +107,6 @@ void csv_to_html(const string& csv_file_path, const string& html_file_path, cons
         int column_index = 0;
         while (getline(ss, cell, ',')) {
             string cell_html = "<td>" + cell + "</td>";
-            // Apply specific styles
             string cell_key = "cell_specific(" + to_string(row_index) + "," + to_string(column_index) + ")";
             unordered_map<string, string> specific_styles;
             if (color_themes.find(cell_key) != color_themes.end()) {
@@ -130,8 +126,6 @@ void csv_to_html(const string& csv_file_path, const string& html_file_path, cons
     }
     html_file << "</tbody></table></body></html>";
 }
-
-
 int main(int argc, char* argv[]) {
     unordered_map<string, string> preferences, default_preferences;
     unordered_map<string, unordered_map<string, string> > color_themes;
@@ -160,8 +154,6 @@ int main(int argc, char* argv[]) {
                 return 1;
         }
     }
-
-    // Debug print statements
     cout << "CSV file path: " << csv_file_path << endl;
     cout << "HTML file path: " << html_file_path << endl;
     cout << "Preferences file path: " << preferences_file_path << endl;
