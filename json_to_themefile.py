@@ -1,4 +1,5 @@
 import json
+import sys
 def convert_to_theme_format(json_data):
     theme_file_content = ""
     for theme_name, attributes in json_data.items():
@@ -13,6 +14,10 @@ def json_to_theme_file(input_path, output_path):
     theme_file_content = convert_to_theme_format(json_data)
     with open(output_path, 'w') as file:
         file.write(theme_file_content)
-input_file = 'colorthemes.json'
-output_file = 'themes.txt'
-json_to_theme_file(input_file, output_file)
+if __name__ == '__main__':
+    if len(sys.argv) != 3:
+        print("Usage: python3 json_to_themefile input.json output.txt")
+    else:
+        input_file = sys.argv[1]
+        output_file = sys.argv[2]
+        json_to_theme_file(input_file, output_file)

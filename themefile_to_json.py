@@ -19,7 +19,7 @@ def convert_to_json(input_path, output_path):
         json.dump(theme_dict, json_file, indent=4)
 if __name__ == '__main__':
     if len(sys.argv) != 3:
-        print("Usage: python3 converter.py input.txt output.json")
+        print("Usage: python3 themefile_to_json.py input.txt output.json")
     else:
         input_file = sys.argv[1]
         output_file = sys.argv[2]
