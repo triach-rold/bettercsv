@@ -19,6 +19,7 @@ default:
   column_banding: "true"
   cell_specific: {}
 user:
+  theme: "theme1"
   cell_font_name: "Verdana"
 cell_specific:
   (1,1):
