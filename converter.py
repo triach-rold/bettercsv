@@ -1,13 +1,13 @@
 import csv
 import re
 import json
+import yaml
 import argparse
-def read_preferences(pref_file_path, is_json=False):
+def read_preferences(pref_file_path, file_format):
     preferences = {}
     cell_specific_styles = {}
     user_preferences = {}
-    
-    if is_json:
+    if file_format == 'json':
         try:
             with open(pref_file_path, 'r', encoding='utf-8') as pref_file:
                 data = json.load(pref_file)
@@ -16,6 +16,16 @@ def read_preferences(pref_file_path, is_json=False):
                 cell_specific_styles.update(data.get("cell_specific", {}))
         except json.JSONDecodeError as e:
             print(f"Error reading JSON preferences file: {e}")
+            return {}
+    elif file_format == 'yaml':
+        try:
+            with open(pref_file_path, 'r', encoding='utf-8') as pref_file:
+                data = yaml.safe_load(pref_file)
+                preferences.update(data.get("default", {}))
+                user_preferences.update(data.get("user", {}))
+                cell_specific_styles.update(data.get("cell_specific", {}))
+        except yaml.YAMLError as e:
+            print(f"Error reading YAML preferences file: {e}")
             return {}
     else:
         with open(pref_file_path, 'r', encoding='utf-8') as pref_file:
@@ -62,15 +72,22 @@ def read_preferences(pref_file_path, is_json=False):
     preferences['cell_specific'] = cell_specific_styles
     preferences.update(user_preferences)
     return preferences
-def read_color_themes(theme_file_path, is_json=False):
+def read_color_themes(theme_file_path, file_format):
     color_themes = {}
-    
-    if is_json:
+
+    if file_format == 'json':
         try:
             with open(theme_file_path, 'r', encoding='utf-8') as theme_file:
                 color_themes = json.load(theme_file)
         except json.JSONDecodeError as e:
             print(f"Error reading JSON color themes file: {e}")
+            return {}
+    elif file_format == 'yaml':
+        try:
+            with open(theme_file_path, 'r', encoding='utf-8') as theme_file:
+                color_themes = yaml.safe_load(theme_file)
+        except yaml.YAMLError as e:
+            print(f"Error reading YAML color themes file: {e}")
             return {}
     else:
         with open(theme_file_path, 'r', encoding='utf-8') as theme_file:
@@ -87,6 +104,7 @@ def read_color_themes(theme_file_path, is_json=False):
                         key, value = stripped_line.split(':', 1)
                         color_themes[current_theme][key.strip()] = value.strip().rstrip(';')
     return color_themes
+
 def read_defaults(defaults_file_path):
     defaults = {}
     with open(defaults_file_path, 'r', encoding='utf-8') as defaults_file:
@@ -294,12 +312,11 @@ def main():
     parser.add_argument('output_html', nargs='?', default='output.html', help='Output HTML file path')
     parser.add_argument('pref_file', nargs='?', default='pref.txt', help='Preferences file path')
     parser.add_argument('theme_file', nargs='?', default='colorthemes.txt', help='Color themes file path')
-    parser.add_argument('--json', action='store_true', help='Specify if the preferences and themes are in JSON format')
+    parser.add_argument('--format', choices=['json', 'yaml', 'txt'], default='txt', help='Specify the format of the preferences and themes file (json, yaml, or txt)')
     args = parser.parse_args()
-
     default_preferences = read_defaults('defaults.txt')
-    preferences = read_preferences(args.pref_file, args.json)
-    color_themes = read_color_themes(args.theme_file, args.json)
+    preferences = read_preferences(args.pref_file, args.format)
+    color_themes = read_color_themes(args.theme_file, args.format)
     csv_to_html(args.input_csv, args.output_html, preferences, color_themes, default_preferences)
 
 if __name__ == '__main__':
