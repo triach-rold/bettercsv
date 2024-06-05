@@ -1,0 +1,32 @@
+default:
+  top_row_color: "#CCCCCC"
+  top_column_color: "#CCCCCC"
+  alt_color_1: "#F2F2F2"
+  alt_color_2: "#FFFFFF"
+  alt_color_3: "#E0E0E0"
+  alt_color_4: "#D9D9D9"
+  background_color: "#FFFFFF"
+  cell_font_name: "Arial"
+  cell_text_color: "#000000"
+  border_color: "#000000"
+  border_thickness: "1px"
+  anti_banding: "true"
+  title: "true"
+  title_text: "My Table"
+  title_color: "#333333"
+  website_title: "My Website"
+  row_banding: "true"
+  column_banding: "true"
+  cell_specific: {}
+user:
+  cell_font_name: "Verdana"
+cell_specific:
+  (1,1):
+    color: "#FFCCCC"
+    font: "Times New Roman"
+    font_color: "#FF0000"
+    font_size: "12px"
+    border_color: "#FF0000"
+    bold: "true"
+    italics: "true"
+    strikethrough: "true"
