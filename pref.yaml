@@ -21,13 +21,3 @@ default:
 user:
   theme: "theme1"
   cell_font_name: "Verdana"
-cell_specific:
-  (1,1):
-    color: "#FFCCCC"
-    font: "Times New Roman"
-    font_color: "#FF0000"
-    font_size: "12px"
-    border_color: "#FF0000"
-    bold: "true"
-    italics: "true"
-    strikethrough: "true"
