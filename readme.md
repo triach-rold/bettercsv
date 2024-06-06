@@ -28,6 +28,10 @@
 
 ## Supported Alternate Formats - 
 
+*Note- JSON and YAML parsing is currently unsupported on the cpp port, which is already highly unstable. Make sure you have the JSON and YAML parsing libraries required to run converter.py.*
+
+*Note- Make sure the extension of the preference and the colortheme file matches the mode after `--format`.*
+
 * **JSON:** Command to run JSON file systems is given by 
 ```
 converter.py example.csv output.html pref.json colorthemes.json --format json
@@ -36,7 +40,6 @@ converter.py example.csv output.html pref.json colorthemes.json --format json
 ```
 converter.py example.csv output.html pref.yaml colorthemes.yaml --format yaml
 ```
-
 
 ## Currently Supported Control Structure Options - 
 General syntax is given as follows (doesn't apply to unspecified category)-
