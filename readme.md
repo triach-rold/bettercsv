@@ -26,6 +26,18 @@
 * **row_banding:** If set to `true`, alternates the colors for rows.
 * **column_banding:** If set to `true`, alternates the colors for columns.
 
+## Supported Alternate Formats - 
+
+* **JSON:** Command to run JSON file systems is given by 
+```
+converter.py example.csv output.html pref.json colorthemes.json --format json
+```
+* **YAML:** Command to run YAML file systems is given by 
+```
+converter.py example.csv output.html pref.yaml colorthemes.yaml --format yaml
+```
+
+
 ## Currently Supported Control Structure Options - 
 General syntax is given as follows (doesn't apply to unspecified category)-
 ```
