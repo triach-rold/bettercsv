@@ -308,7 +308,7 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes, defaul
         htmlfile.write(html_content)
 def main():
     parser = argparse.ArgumentParser(description='Convert a CSV file to an HTML table with optional styling.')
-    parser.add_argument('input_csv', nargs='?', default='example.csv', help='Input CSV file path')
+    parser.add_argument('input_csv', nargs='?', default='csv_files/example.csv', help='Input CSV file path')
     parser.add_argument('output_html', nargs='?', default='output.html', help='Output HTML file path')
     parser.add_argument('pref_file', nargs='?', default='pref_files/pref.txt', help='Preferences file path')
     parser.add_argument('theme_file', nargs='?', default='colorthemes/colorthemes.txt', help='Color themes file path')
