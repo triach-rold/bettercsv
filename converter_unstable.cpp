@@ -8,6 +8,11 @@
 #include <getopt.h>
 #include <cstring>
 using namespace std;
+
+// NOTE - This code is highly unstable. Does not support basic preferences yet and will create messier code that is hard to refactor.
+
+// NOTE - This code will NOT parse YAML and JSON files (it barely parses regular themefiles) and updates are few and far between. This will probably not be actively mantained.
+
 unordered_map<string, string> read_preferences(const string& file_path) {
     unordered_map<string, string> preferences;
     ifstream file(file_path);
