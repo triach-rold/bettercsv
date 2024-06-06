@@ -55,7 +55,7 @@ parent_control_structure_name:{
     }
 }
 ```
-* **C++ Port** - Highly unstable and buggy. Will straight up not work in current versions. JSON support is non-existent for the C++ port. Might be scrapped. Preference commands are ignored.
+* **C++ Port** - Highly unstable and buggy. Will straight up not work in current versions. JSON and YAML support is non-existent for the C++ port. Might be scrapped. Preference commands are ignored.
 
 ## Planned features (features under consideration/review):
 
