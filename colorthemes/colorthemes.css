@@ -1,0 +1,22 @@
+:root {
+    --background-color: #ffffff;
+    --top-row-color: #dddddd;
+    --top-column-color: #dddddd;
+    --alt-color-1: #ffffff;
+    --alt-color-2: #f0f0f0;
+    --cell-font-name: Arial, sans-serif;
+    --cell-text-color: #000000;
+    --border-color: #cccccc;
+    --border-thickness: 1px;
+}
+[data-theme="dark"] {
+    --background-color: #333333;
+    --top-row-color: #444444;
+    --top-column-color: #444444;
+    --alt-color-1: #555555;
+    --alt-color-2: #666666;
+    --cell-font-name: Arial, sans-serif;
+    --cell-text-color: #ffffff;
+    --border-color: #777777;
+    --border-thickness: 1px;
+}
