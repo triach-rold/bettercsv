@@ -84,7 +84,7 @@ parent_control_structure_name:{
 
 *Note- these features are planned or under review. There is no guarantee of them being added. If you have an implementation of any of these features that does not interfere with existing code and isn't buggy- submit a pull request.*
 
-- [ ] **CSS Support/Injection** - Support for CSS Injections in preference files.
+- [x] **CSS Support/Injection** - Support for CSS Injections in preference files. `Completed in d51a652.`
 - [x] **JSON support** - Support for JSON files as imports. `Completed in bb084f2.`
 - [ ] **Website demo** - Website demo with GUI features to try out features.
 - [x] **YAML support** - Add YAML files as imports. `Completed in 40839db.`
