@@ -32,7 +32,7 @@
 
 *Note- Make sure the extension of the preference and the colortheme file matches the mode after `--format`.*
 
-*Note- Using `-css` flag overwrites any conflicting commands mentioned in the non-CSS preference files. Colorthemes might also be affected because of this. Best practice is to **avoid** using the `-css` option if you're not injecting any code. Try using the preference files as much as possible since css files are common conflict causes.*
+*Note- Using `--css` flag overwrites any conflicting commands mentioned in the non-CSS preference files. Colorthemes might also be affected because of this. Best practice is to **avoid** using the `--css` option if you're not injecting any code. Try using the preference files as much as possible since css files are common conflict causes.*
 
 * **JSON:** Command to run JSON file systems is given by 
 ```
