@@ -41,6 +41,9 @@ converter.py csv_files/example.csv output.html pref_files/pref.json colorthemes/
 converter.py csv_files/example.csv output.html pref_files/pref.yaml colorthemes/colorthemes.yaml --format yaml
 ```
 
+* **CSS:** Does not follow the direct established rules of the alternate formats since it's more of a direct "code injection" into the executed webpage instead of txt/YAML or JSON commands that need to be interpreted. Activate using the `--css` flag after the `--format` tag. Colorthemes are supported but might overwrite pre-existing colorthemes.
+
+
 ## Currently Supported Control Structure Options - 
 General syntax is given as follows (doesn't apply to unspecified category)-
 ```
