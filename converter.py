@@ -72,6 +72,7 @@ def read_preferences(pref_file_path, file_format):
     preferences['cell_specific'] = cell_specific_styles
     preferences.update(user_preferences)
     return preferences
+
 def read_color_themes(theme_file_path, file_format):
     color_themes = {}
 
@@ -114,7 +115,13 @@ def read_defaults(defaults_file_path):
                 key, value = stripped_line.split(':')
                 defaults[key.strip()] = value.strip().rstrip(';')
     return defaults
-
+def read_css(css_file_path):
+    try:
+        with open(css_file_path, 'r', encoding='utf-8') as css_file:
+            return css_file.read()
+    except FileNotFoundError:
+        print(f"Error: CSS file {css_file_path} not found.")
+        return ""
 def apply_specific_styles(html_content, specific_styles, row_index, column_index):
     if row_index in specific_styles and column_index in specific_styles[row_index]:
         styles = specific_styles[row_index][column_index]
@@ -149,7 +156,7 @@ def apply_specific_styles(html_content, specific_styles, row_index, column_index
                 html_content = html_content.replace(row, new_row, 1)
     return html_content
 
-def csv_to_html(csv_file_path, html_file_path, preferences, color_themes, default_preferences):
+def csv_to_html(csv_file_path, html_file_path, preferences, color_themes, default_preferences, css_content):
     settings = {**default_preferences, **preferences}
     selected_theme = settings.get("colortheme")
     if selected_theme and selected_theme in color_themes:
@@ -232,6 +239,7 @@ def csv_to_html(csv_file_path, html_file_path, preferences, color_themes, defaul
                 {'tr:nth-child(2n+2) td { background-color: var(--alt-color-2); }' if row_banding else ''}
                 {'' if row_banding else 'tr td { background-color: var(--alt-color-1); }'}
                 {''.join(['td:nth-child(2n+1) { background-color: var(--alt-color-1); }', 'td:nth-child(2n+2) { background-color: var(--alt-color-2); }']) if column_banding else ''}
+                {css_content}
             </style>
             <script>
                 function changeTheme(theme) {{
@@ -313,11 +321,13 @@ def main():
     parser.add_argument('pref_file', nargs='?', default='pref_files/pref.txt', help='Preferences file path')
     parser.add_argument('theme_file', nargs='?', default='colorthemes/colorthemes.txt', help='Color themes file path')
     parser.add_argument('--format', choices=['json', 'yaml', 'txt'], default='txt', help='Specify the format of the preferences and themes file (json, yaml, or txt)')
+    parser.add_argument('--css', nargs='?', default='', help='Optional CSS file path for additional styling')
     args = parser.parse_args()
     default_preferences = read_defaults('defaults.txt')
     preferences = read_preferences(args.pref_file, args.format)
     color_themes = read_color_themes(args.theme_file, args.format)
-    csv_to_html(args.input_csv, args.output_html, preferences, color_themes, default_preferences)
+    css_content = read_css(args.css) if args.css else ""
+    csv_to_html(args.input_csv, args.output_html, preferences, color_themes, default_preferences, css_content)
 
 if __name__ == '__main__':
     main()
