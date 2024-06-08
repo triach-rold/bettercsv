@@ -1,250 +1,438 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>betterCSV Demo Website</title>
     <style>
-        :root {
-            --background-color: #FFFFFF;
-            --top-row-color: #CCCCCC;
-            --top-column-color: #EEEEEE;
-            --alt-color-1: #F2F2F2;
-            --alt-color-2: #FFFFFF;
-            --cell-font-name: 'Arial';
-            --cell-text-color: #000000;
-            --border-color: #000000;
-            --border-thickness: 1px;
-        }
-        body {
-            background-color: var(--background-color);
-            font-family: var(--cell-font-name), sans-serif;
-            margin: 20px;
-        }
-        h1 {
-            text-align: center;
-            color: var(--cell-text-color);
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            color: var(--cell-text-color);
-            border: var(--border-thickness) solid var(--border-color);
-            padding: 8px;
-            text-align: left;
-        }
-        tr:first-child {
-            background-color: var(--top-row-color);
-        }
-        td:first-child {
-            background-color: var(--top-column-color);
-        }
-        tr:nth-child(2n+1) td {
-            background-color: var(--alt-color-1);
-        }
-        tr:nth-child(2n+2) td {
-            background-color: var(--alt-color-2);
-        }
+      :root {
+        --background-color: #ffffff;
+        --top-row-color: #cccccc;
+        --top-column-color: #eeeeee;
+        --alt-color-1: #f2f2f2;
+        --alt-color-2: #ffffff;
+        --alt-color-3: #e6e6e6;
+        --alt-color-4: #dcdcdc;
+        --cell-font-name: "Arial";
+        --cell-text-color: #000000;
+        --border-color: #000000;
+        --border-thickness: 1px;
+        --title-color: #000000;
+        --switcher-font: "Arial";
+        --switcher-color: #000000;
+        --switcher-font-size: 14px;
+      }
+      body {
+        background-color: var(--background-color);
+        font-family: var(--cell-font-name), sans-serif;
+        margin: 20px;
+      }
+      h1 {
+        text-align: center;
+        color: var(--title-color);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        color: var(--cell-text-color);
+        border: var(--border-thickness) solid var(--border-color);
+        padding: 8px;
+        text-align: left;
+      }
+      tr:first-child {
+        background-color: var(--top-row-color);
+      }
+      td:first-child {
+        background-color: var(--top-column-color);
+      }
+      tr:nth-child(2n + 1) td {
+        background-color: var(--alt-color-1);
+      }
+      tr:nth-child(2n + 2) td {
+        background-color: var(--alt-color-2);
+      }
     </style>
-</head>
-<body>
-    <h1>BetterCSV DE</h1>
-    
-    <div style="text-align:center;">
-        <label for="themeSwitcher">Select Color Theme:</label>
-        <select id="themeSwitcher">
-            <option value="default">Default</option>
-            <option value="theme1">Theme 1</option>
-            <option value="theme2">Theme 2</option>
-        </select>
+  </head>
+  <body>
+    <h1>BetterCSV Demo Website</h1>
+
+    <div style="text-align: center; margin-top: 20px">
+      <label for="themeSwitcher">Select Color Theme:</label>
+      <select id="themeSwitcher">
+        <option value="default">Default</option>
+        <option value="theme1">Theme 1</option>
+        <option value="theme2">Theme 2</option>
+        <option value="dracula">Dracula</option>
+        <option value="light">Light</option>
+        <option value="solarized">Solarized</option>
+        <option value="gruvbox">Gruvbox</option>
+        <option value="monokai">Monokai</option>
+        <option value="nord">Nord</option>
+        <option value="tokyo-night">Tokyo Night</option>
+        <option value="oceanic-next">Oceanic Next</option>
+        <option value="palenight">Palenight</option>
+        <option value="ayu-mirage">Ayu Mirage</option>
+        <option value="material">Material</option>
+        <option value="tomorrow-night">Tomorrow Night</option>
+        <option value="dark-matter">Dark Matter</option>
+        <option value="catppuccin">Catppuccin</option>
+        <option value="midnight">Midnight</option>
+        <option value="forest">Forest</option>
+        <option value="sunset">Sunset</option>
+        <option value="ocean">Ocean</option>
+        <option value="desert">Desert</option>
+        <option value="cherry-blossom">Cherry Blossom</option>
+        <option value="lavender">Lavender</option>
+        <option value="autumn">Autumn</option>
+        <option value="midnight-blue">Midnight Blue</option>
+        <option value="mint">Mint</option>
+        <option value="peach">Peach</option>
+        <option value="emerald">Emerald</option>
+      </select>
     </div>
 
-    <div style="text-align:center; margin-top: 20px;">
-        <label for="rowBanding">Row Banding:</label>
-        <input type="checkbox" id="rowBanding" checked>
-
-        <label for="columnBanding" style="margin-left: 20px;">Column Banding:</label>
-        <input type="checkbox" id="columnBanding">
-    </div>
-
-    <div style="text-align:center; margin-top: 20px;">
+    <div
+      style="
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 20px;
+      "
+    >
+      <div style="margin: 10px">
         <label for="backgroundColor">Background Color:</label>
-        <input type="color" id="backgroundColor" value="#FFFFFF">
+        <input type="color" id="backgroundColor" value="#FFFFFF" />
+      </div>
+      <div style="margin: 10px">
+        <label for="topRowColor">Top Row Color:</label>
+        <input type="color" id="topRowColor" value="#CCCCCC" />
+      </div>
+      <div style="margin: 10px">
+        <label for="topColumnColor">Top Column Color:</label>
+        <input type="color" id="topColumnColor" value="#EEEEEE" />
+      </div>
+      <div style="margin: 10px">
+        <label for="altColor1">Alt Color 1:</label>
+        <input type="color" id="altColor1" value="#F2F2F2" />
+      </div>
+      <div style="margin: 10px">
+        <label for="altColor2">Alt Color 2:</label>
+        <input type="color" id="altColor2" value="#FFFFFF" />
+      </div>
+      <div style="margin: 10px">
+        <label for="altColor3">Alt Color 3:</label>
+        <input type="color" id="altColor3" value="#E6E6E6" />
+      </div>
+      <div style="margin: 10px">
+        <label for="altColor4">Alt Color 4:</label>
+        <input type="color" id="altColor4" value="#DCDCDC" />
+      </div>
+      <div style="margin: 10px">
+        <label for="cellTextColor">Cell Text Color:</label>
+        <input type="color" id="cellTextColor" value="#000000" />
+      </div>
+      <div style="margin: 10px">
+        <label for="borderColor">Border Color:</label>
+        <input type="color" id="borderColor" value="#000000" />
+      </div>
+      <div style="margin: 10px">
+        <label for="titleColor">Title Color:</label>
+        <input type="color" id="titleColor" value="#000000" />
+      </div>
+    </div>
 
-        <label for="topRowColor" style="margin-left: 20px;">Top Row Color:</label>
-        <input type="color" id="topRowColor" value="#CCCCCC">
-
-        <label for="topColumnColor" style="margin-left: 20px;">Top Column Color:</label>
-        <input type="color" id="topColumnColor" value="#EEEEEE">
-
-        <label for="altColor1" style="margin-left: 20px;">Alt Color 1:</label>
-        <input type="color" id="altColor1" value="#F2F2F2">
-
-        <label for="altColor2" style="margin-left: 20px;">Alt Color 2:</label>
-        <input type="color" id="altColor2" value="#FFFFFF">
-
-        <label for="cellTextColor" style="margin-left: 20px;">Cell Text Color:</label>
-        <input type="color" id="cellTextColor" value="#000000">
-
-        <label for="borderColor" style="margin-left: 20px;">Border Color:</label>
-        <input type="color" id="borderColor" value="#000000">
+    <div
+      style="
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 20px;
+      "
+    >
+      <div style="margin: 10px">
+        <label for="rowBanding">Row Banding:</label>
+        <input type="checkbox" id="rowBanding" checked />
+      </div>
+      <div style="margin: 10px">
+        <label for="columnBanding">Column Banding:</label>
+        <input type="checkbox" id="columnBanding" />
+      </div>
     </div>
 
     <table id="dataTable">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Age</th>
-                <th>Country</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>John Doe</td>
-                <td>28</td>
-                <td>USA</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>Jane Smith</td>
-                <td>34</td>
-                <td>Canada</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>Mike Johnson</td>
-                <td>45</td>
-                <td>UK</td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td>Emily Davis</td>
-                <td>22</td>
-                <td>Australia</td>
-            </tr>
-        </tbody>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Age</th>
+          <th>Country</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>John Doe</td>
+          <td>28</td>
+          <td>USA</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Jane Smith</td>
+          <td>34</td>
+          <td>Canada</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Mike Johnson</td>
+          <td>45</td>
+          <td>UK</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Emily Davis</td>
+          <td>22</td>
+          <td>Australia</td>
+        </tr>
+      </tbody>
     </table>
 
     <script>
-        const themes = {
-            default: {
-                '--background-color': '#FFFFFF',
-                '--top-row-color': '#CCCCCC',
-                '--top-column-color': '#EEEEEE',
-                '--alt-color-1': '#F2F2F2',
-                '--alt-color-2': '#FFFFFF',
-                '--cell-font-name': 'Arial',
-                '--cell-text-color': '#000000',
-                '--border-color': '#000000',
-                '--border-thickness': '1px'
-            },
-            theme1: {
-                '--background-color': '#EFEFEF',
-                '--top-row-color': '#FFCCCC',
-                '--top-column-color': '#FFEEEE',
-                '--alt-color-1': '#FFE6E6',
-                '--alt-color-2': '#FFFFFF',
-                '--cell-font-name': 'Courier New',
-                '--cell-text-color': '#990000',
-                '--border-color': '#990000',
-                '--border-thickness': '2px'
-            },
-            theme2: {
-                '--background-color': '#FFFFE0',
-                '--top-row-color': '#FFD700',
-                '--top-column-color': '#FFE4B5',
-                '--alt-color-1': '#FFFACD',
-                '--alt-color-2': '#FAFAD2',
-                '--cell-font-name': 'Verdana',
-                '--cell-text-color': '#8B4513',
-                '--border-color': '#8B4513',
-                '--border-thickness': '2px'
+      const themes = {
+        default: {
+          "--background-color": "#FFFFFF",
+          "--top-row-color": "#CCCCCC",
+          "--top-column-color": "#EEEEEE",
+          "--alt-color-1": "#F2F2F2",
+          "--alt-color-2": "#FFFFFF",
+          "--alt-color-3": "#E6E6E6",
+          "--alt-color-4": "#DCDCDC",
+          "--cell-font-name": "Arial",
+          "--cell-text-color": "#000000",
+          "--border-color": "#000000",
+          "--border-thickness": "1px",
+          "--title-color": "#000000",
+          "--switcher-font": "Arial",
+          "--switcher-color": "#000000",
+          "--switcher-font-size": "14px",
+        },
+        theme1: {
+          "--background-color": "#EFEFEF",
+          "--top-row-color": "#FFCCCC",
+          "--top-column-color": "#FFEEEE",
+          "--alt-color-1": "#FFE6E6",
+          "--alt-color-2": "#FFFFFF",
+          "--alt-color-3": "#FFDADA",
+          "--alt-color-4": "#FFCFCF",
+          "--cell-font-name": "Courier New",
+          "--cell-text-color": "#990000",
+          "--border-color": "#990000",
+          "--border-thickness": "2px",
+          "--title-color": "#990000",
+          "--switcher-font": "Courier New",
+          "--switcher-color": "#990000",
+          "--switcher-font-size": "14px",
+        },
+        theme2: {
+          "--background-color": "#FFFFE0",
+          "--top-row-color": "#FFD700",
+          "--top-column-color": "#FFE4B5",
+          "--alt-color-1": "#FFFACD",
+          "--alt-color-2": "#FAFAD2",
+          "--alt-color-3": "#FFF8DC",
+          "--alt-color-4": "#FFF5EE",
+          "--cell-font-name": "Verdana",
+          "--cell-text-color": "#8B4513",
+          "--border-color": "#8B4513",
+          "--border-thickness": "2px",
+          "--title-color": "#8B4513",
+          "--switcher-font": "Verdana",
+          "--switcher-color": "#8B4513",
+          "--switcher-font-size": "14px",
+        },
+      };
+
+      function applyTheme(theme) {
+        const root = document.documentElement;
+        const themeProperties = themes[theme];
+        for (const property in themeProperties) {
+          root.style.setProperty(property, themeProperties[property]);
+        }
+        updateColorInputs();
+      }
+
+      function updateColorInputs() {
+        const rootStyles = getComputedStyle(document.documentElement);
+        document.getElementById("backgroundColor").value = rootStyles
+          .getPropertyValue("--background-color")
+          .trim();
+        document.getElementById("topRowColor").value = rootStyles
+          .getPropertyValue("--top-row-color")
+          .trim();
+        document.getElementById("topColumnColor").value = rootStyles
+          .getPropertyValue("--top-column-color")
+          .trim();
+        document.getElementById("altColor1").value = rootStyles
+          .getPropertyValue("--alt-color-1")
+          .trim();
+        document.getElementById("altColor2").value = rootStyles
+          .getPropertyValue("--alt-color-2")
+          .trim();
+        document.getElementById("altColor3").value = rootStyles
+          .getPropertyValue("--alt-color-3")
+          .trim();
+        document.getElementById("altColor4").value = rootStyles
+          .getPropertyValue("--alt-color-4")
+          .trim();
+        document.getElementById("cellTextColor").value = rootStyles
+          .getPropertyValue("--cell-text-color")
+          .trim();
+        document.getElementById("borderColor").value = rootStyles
+          .getPropertyValue("--border-color")
+          .trim();
+        document.getElementById("titleColor").value = rootStyles
+          .getPropertyValue("--title-color")
+          .trim();
+      }
+
+      function applyBanding() {
+        const rowBanding = document.getElementById("rowBanding").checked;
+        const columnBanding = document.getElementById("columnBanding").checked;
+
+        const rows = document.querySelectorAll("#dataTable tbody tr");
+        rows.forEach((row, rowIndex) => {
+          const cells = row.querySelectorAll("td");
+          cells.forEach((cell, columnIndex) => {
+            if (rowBanding) {
+              cell.style.backgroundColor =
+                rowIndex % 2 === 0
+                  ? "var(--alt-color-1)"
+                  : "var(--alt-color-2)";
+            } else {
+              cell.style.backgroundColor = "var(--alt-color-1)";
             }
-        };
-
-        function applyTheme(theme) {
-            const root = document.documentElement;
-            const themeProperties = themes[theme];
-            for (const property in themeProperties) {
-                root.style.setProperty(property, themeProperties[property]);
+            if (columnBanding) {
+              cell.style.backgroundColor =
+                columnIndex % 2 === 0
+                  ? "var(--alt-color-1)"
+                  : "var(--alt-color-2)";
             }
-            updateColorInputs();
-        }
+            if (rowBanding && columnBanding) {
+              cell.style.backgroundColor =
+                (rowIndex + columnIndex) % 2 === 0
+                  ? "var(--alt-color-1)"
+                  : "var(--alt-color-2)";
+            }
+          });
+        });
+      }
 
-        function updateColorInputs() {
-            document.getElementById('backgroundColor').value = getComputedStyle(document.documentElement).getPropertyValue('--background-color').trim();
-            document.getElementById('topRowColor').value = getComputedStyle(document.documentElement).getPropertyValue('--top-row-color').trim();
-            document.getElementById('topColumnColor').value = getComputedStyle(document.documentElement).getPropertyValue('--top-column-color').trim();
-            document.getElementById('altColor1').value = getComputedStyle(document.documentElement).getPropertyValue('--alt-color-1').trim();
-            document.getElementById('altColor2').value = getComputedStyle(document.documentElement).getPropertyValue('--alt-color-2').trim();
-            document.getElementById('cellTextColor').value = getComputedStyle(document.documentElement).getPropertyValue('--cell-text-color').trim();
-            document.getElementById('borderColor').value = getComputedStyle(document.documentElement).getPropertyValue('--border-color').trim();
-        }
-
-        function applyBanding() {
-            const rowBanding = document.getElementById('rowBanding').checked;
-            const columnBanding = document.getElementById('columnBanding').checked;
-
-            const rows = document.querySelectorAll('#dataTable tbody tr');
-            rows.forEach((row, rowIndex) => {
-                const cells = row.querySelectorAll('td');
-                cells.forEach((cell, columnIndex) => {
-                    if (rowBanding) {
-                        cell.style.backgroundColor = rowIndex % 2 === 0 ? 'var(--alt-color-1)' : 'var(--alt-color-2)';
-                    } else {
-                        cell.style.backgroundColor = 'var(--alt-color-1)';
-                    }
-                    if (columnBanding) {
-                        cell.style.backgroundColor = columnIndex % 2 === 0 ? 'var(--alt-color-1)' : 'var(--alt-color-2)';
-                    }
-                    if (rowBanding && columnBanding) {
-                        cell.style.backgroundColor = (rowIndex + columnIndex) % 2 === 0 ? 'var(--alt-color-1)' : 'var(--alt-color-2)';
-                    }
-                });
-            });
-        }
-
-        document.getElementById('themeSwitcher').addEventListener('change', function() {
-            applyTheme(this.value);
+      document
+        .getElementById("themeSwitcher")
+        .addEventListener("change", function () {
+          applyTheme(this.value);
         });
 
-        document.getElementById('rowBanding').addEventListener('change', applyBanding);
-        document.getElementById('columnBanding').addEventListener('change', applyBanding);
-
-        document.getElementById('backgroundColor').addEventListener('input', function() {
-            document.documentElement.style.setProperty('--background-color', this.value);
+      document
+        .getElementById("backgroundColor")
+        .addEventListener("input", function () {
+          document.documentElement.style.setProperty(
+            "--background-color",
+            this.value
+          );
         });
 
-        document.getElementById('topRowColor').addEventListener('input', function() {
-            document.documentElement.style.setProperty('--top-row-color', this.value);
+      document
+        .getElementById("topRowColor")
+        .addEventListener("input", function () {
+          document.documentElement.style.setProperty(
+            "--top-row-color",
+            this.value
+          );
         });
 
-        document.getElementById('topColumnColor').addEventListener('input', function() {
-            document.documentElement.style.setProperty('--top-column-color', this.value);
+      document
+        .getElementById("topColumnColor")
+        .addEventListener("input", function () {
+          document.documentElement.style.setProperty(
+            "--top-column-color",
+            this.value
+          );
         });
 
-        document.getElementById('altColor1').addEventListener('input', function() {
-            document.documentElement.style.setProperty('--alt-color-1', this.value);
+      document
+        .getElementById("altColor1")
+        .addEventListener("input", function () {
+          document.documentElement.style.setProperty(
+            "--alt-color-1",
+            this.value
+          );
         });
 
-        document.getElementById('altColor2').addEventListener('input', function() {
-            document.documentElement.style.setProperty('--alt-color-2', this.value);
+      document
+        .getElementById("altColor2")
+        .addEventListener("input", function () {
+          document.documentElement.style.setProperty(
+            "--alt-color-2",
+            this.value
+          );
         });
 
-        document.getElementById('cellTextColor').addEventListener('input', function() {
-            document.documentElement.style.setProperty('--cell-text-color', this.value);
+      document
+        .getElementById("altColor3")
+        .addEventListener("input", function () {
+          document.documentElement.style.setProperty(
+            "--alt-color-3",
+            this.value
+          );
         });
 
-        document.getElementById('borderColor').addEventListener('input', function() {
-            document.documentElement.style.setProperty('--border-color', this.value);
+      document
+        .getElementById("altColor4")
+        .addEventListener("input", function () {
+          document.documentElement.style.setProperty(
+            "--alt-color-4",
+            this.value
+          );
         });
 
-        // Initialize with default theme
-        applyTheme('default');
+      document
+        .getElementById("cellTextColor")
+        .addEventListener("input", function () {
+          document.documentElement.style.setProperty(
+            "--cell-text-color",
+            this.value
+          );
+        });
+
+      document
+        .getElementById("borderColor")
+        .addEventListener("input", function () {
+          document.documentElement.style.setProperty(
+            "--border-color",
+            this.value
+          );
+        });
+
+      document
+        .getElementById("titleColor")
+        .addEventListener("input", function () {
+          document.documentElement.style.setProperty(
+            "--title-color",
+            this.value
+          );
+        });
+
+      document
+        .getElementById("rowBanding")
+        .addEventListener("change", applyBanding);
+      document
+        .getElementById("columnBanding")
+        .addEventListener("change", applyBanding);
+
+      applyTheme("default");
     </script>
-</body>
+  </body>
 </html>
