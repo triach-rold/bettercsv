@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>betterCSV Demo Website</title>
+    <style>
+        :root {
+            --background-color: #FFFFFF;
+            --top-row-color: #CCCCCC;
+            --top-column-color: #EEEEEE;
+            --alt-color-1: #F2F2F2;
+            --alt-color-2: #FFFFFF;
+            --cell-font-name: 'Arial';
+            --cell-text-color: #000000;
+            --border-color: #000000;
+            --border-thickness: 1px;
+        }
+        body {
+            background-color: var(--background-color);
+            font-family: var(--cell-font-name), sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: var(--cell-text-color);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            color: var(--cell-text-color);
+            border: var(--border-thickness) solid var(--border-color);
+            padding: 8px;
+            text-align: left;
+        }
+        tr:first-child {
+            background-color: var(--top-row-color);
+        }
+        td:first-child {
+            background-color: var(--top-column-color);
+        }
+        tr:nth-child(2n+1) td {
+            background-color: var(--alt-color-1);
+        }
+        tr:nth-child(2n+2) td {
+            background-color: var(--alt-color-2);
+        }
+    </style>
+</head>
+<body>
+    <h1>BetterCSV DE</h1>
+    
+    <div style="text-align:center;">
+        <label for="themeSwitcher">Select Color Theme:</label>
+        <select id="themeSwitcher">
+            <option value="default">Default</option>
+            <option value="theme1">Theme 1</option>
+            <option value="theme2">Theme 2</option>
+        </select>
+    </div>
+
+    <div style="text-align:center; margin-top: 20px;">
+        <label for="rowBanding">Row Banding:</label>
+        <input type="checkbox" id="rowBanding" checked>
+
+        <label for="columnBanding" style="margin-left: 20px;">Column Banding:</label>
+        <input type="checkbox" id="columnBanding">
+    </div>
+
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Country</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>John Doe</td>
+                <td>28</td>
+                <td>USA</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Jane Smith</td>
+                <td>34</td>
+                <td>Canada</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Mike Johnson</td>
+                <td>45</td>
+                <td>UK</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>Emily Davis</td>
+                <td>22</td>
+                <td>Australia</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        const themes = {
+            default: {
+                '--background-color': '#FFFFFF',
+                '--top-row-color': '#CCCCCC',
+                '--top-column-color': '#EEEEEE',
+                '--alt-color-1': '#F2F2F2',
+                '--alt-color-2': '#FFFFFF',
+                '--cell-font-name': 'Arial',
+                '--cell-text-color': '#000000',
+                '--border-color': '#000000',
+                '--border-thickness': '1px'
+            },
+            theme1: {
+                '--background-color': '#EFEFEF',
+                '--top-row-color': '#FFCCCC',
+                '--top-column-color': '#FFEEEE',
+                '--alt-color-1': '#FFE6E6',
+                '--alt-color-2': '#FFFFFF',
+                '--cell-font-name': 'Courier New',
+                '--cell-text-color': '#990000',
+                '--border-color': '#990000',
+                '--border-thickness': '2px'
+            },
+            theme2: {
+                '--background-color': '#FFFFE0',
+                '--top-row-color': '#FFD700',
+                '--top-column-color': '#FFE4B5',
+                '--alt-color-1': '#FFFACD',
+                '--alt-color-2': '#FAFAD2',
+                '--cell-font-name': 'Verdana',
+                '--cell-text-color': '#8B4513',
+                '--border-color': '#8B4513',
+                '--border-thickness': '2px'
+            }
+        };
+
+        function applyTheme(theme) {
+            const root = document.documentElement;
+            const themeProperties = themes[theme];
+            for (const property in themeProperties) {
+                root.style.setProperty(property, themeProperties[property]);
+            }
+        }
+
+        function applyBanding() {
+            const rowBanding = document.getElementById('rowBanding').checked;
+            const columnBanding = document.getElementById('columnBanding').checked;
+
+            const rows = document.querySelectorAll('#dataTable tbody tr');
+            rows.forEach((row, rowIndex) => {
+                const cells = row.querySelectorAll('td');
+                cells.forEach((cell, columnIndex) => {
+                    if (rowBanding) {
+                        cell.style.backgroundColor = rowIndex % 2 === 0 ? 'var(--alt-color-1)' : 'var(--alt-color-2)';
+                    } else {
+                        cell.style.backgroundColor = 'var(--alt-color-1)';
+                    }
+                    if (columnBanding) {
+                        cell.style.backgroundColor = columnIndex % 2 === 0 ? 'var(--alt-color-1)' : 'var(--alt-color-2)';
+                    }
+                    if (rowBanding && columnBanding) {
+                        cell.style.backgroundColor = (rowIndex + columnIndex) % 2 === 0 ? 'var(--alt-color-1)' : 'var(--alt-color-2)';
+                    }
+                });
+            });
+        }
+
+        document.getElementById('themeSwitcher').addEventListener('change', function() {
+            applyTheme(this.value);
+        });
+
+        document.getElementById('rowBanding').addEventListener('change', applyBanding);
+        document.getElementById('columnBanding').addEventListener('change', applyBanding);
+
+        // Initialize with default theme
+        applyTheme('default');
+    </script>
+</body>
+</html>
