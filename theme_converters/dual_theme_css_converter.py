@@ -54,7 +54,7 @@ def write_themefile(themes, theme_file_path):
             theme_file.write("}\n\n")
 
 def main():
-    parser = argparse.ArgumentParser(description='Convert theme files between txt and CSS formats.')
+    parser = argparse.ArgumentParser(description='Convert theme files to and from txt and CSS formats.')
     parser.add_argument('input_file', help='Input file path')
     parser.add_argument('output_file', help='Output file path')
     
@@ -72,7 +72,7 @@ def main():
         write_themefile(themes, output_file)
         print(f"Converted {input_file} to {output_file}")
     else:
-        print("Invalid file extensions. Please provide a .txt file as an input and a (an?) .css file as an output, or vice versa.")
+        print("Invalid!")
 
 if __name__ == '__main__':
     main()
