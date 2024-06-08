@@ -86,5 +86,5 @@ parent_control_structure_name:{
 
 - [x] **CSS Support/Injection** - Support for CSS Injections in preference files. `Completed in d51a652.`
 - [x] **JSON support** - Support for JSON files as imports. `Completed in bb084f2.`
-- [ ] **Website demo** - Website demo with GUI features to try out features.
+- [x] **Website demo** - Website demo with GUI features to try out features. `Completed in 46855bc.`
 - [x] **YAML support** - Add YAML files as imports. `Completed in 40839db.`
