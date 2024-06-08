@@ -69,6 +69,29 @@
         <input type="checkbox" id="columnBanding">
     </div>
 
+    <div style="text-align:center; margin-top: 20px;">
+        <label for="backgroundColor">Background Color:</label>
+        <input type="color" id="backgroundColor" value="#FFFFFF">
+
+        <label for="topRowColor" style="margin-left: 20px;">Top Row Color:</label>
+        <input type="color" id="topRowColor" value="#CCCCCC">
+
+        <label for="topColumnColor" style="margin-left: 20px;">Top Column Color:</label>
+        <input type="color" id="topColumnColor" value="#EEEEEE">
+
+        <label for="altColor1" style="margin-left: 20px;">Alt Color 1:</label>
+        <input type="color" id="altColor1" value="#F2F2F2">
+
+        <label for="altColor2" style="margin-left: 20px;">Alt Color 2:</label>
+        <input type="color" id="altColor2" value="#FFFFFF">
+
+        <label for="cellTextColor" style="margin-left: 20px;">Cell Text Color:</label>
+        <input type="color" id="cellTextColor" value="#000000">
+
+        <label for="borderColor" style="margin-left: 20px;">Border Color:</label>
+        <input type="color" id="borderColor" value="#000000">
+    </div>
+
     <table id="dataTable">
         <thead>
             <tr>
@@ -149,6 +172,17 @@
             for (const property in themeProperties) {
                 root.style.setProperty(property, themeProperties[property]);
             }
+            updateColorInputs();
+        }
+
+        function updateColorInputs() {
+            document.getElementById('backgroundColor').value = getComputedStyle(document.documentElement).getPropertyValue('--background-color').trim();
+            document.getElementById('topRowColor').value = getComputedStyle(document.documentElement).getPropertyValue('--top-row-color').trim();
+            document.getElementById('topColumnColor').value = getComputedStyle(document.documentElement).getPropertyValue('--top-column-color').trim();
+            document.getElementById('altColor1').value = getComputedStyle(document.documentElement).getPropertyValue('--alt-color-1').trim();
+            document.getElementById('altColor2').value = getComputedStyle(document.documentElement).getPropertyValue('--alt-color-2').trim();
+            document.getElementById('cellTextColor').value = getComputedStyle(document.documentElement).getPropertyValue('--cell-text-color').trim();
+            document.getElementById('borderColor').value = getComputedStyle(document.documentElement).getPropertyValue('--border-color').trim();
         }
 
         function applyBanding() {
@@ -180,6 +214,34 @@
 
         document.getElementById('rowBanding').addEventListener('change', applyBanding);
         document.getElementById('columnBanding').addEventListener('change', applyBanding);
+
+        document.getElementById('backgroundColor').addEventListener('input', function() {
+            document.documentElement.style.setProperty('--background-color', this.value);
+        });
+
+        document.getElementById('topRowColor').addEventListener('input', function() {
+            document.documentElement.style.setProperty('--top-row-color', this.value);
+        });
+
+        document.getElementById('topColumnColor').addEventListener('input', function() {
+            document.documentElement.style.setProperty('--top-column-color', this.value);
+        });
+
+        document.getElementById('altColor1').addEventListener('input', function() {
+            document.documentElement.style.setProperty('--alt-color-1', this.value);
+        });
+
+        document.getElementById('altColor2').addEventListener('input', function() {
+            document.documentElement.style.setProperty('--alt-color-2', this.value);
+        });
+
+        document.getElementById('cellTextColor').addEventListener('input', function() {
+            document.documentElement.style.setProperty('--cell-text-color', this.value);
+        });
+
+        document.getElementById('borderColor').addEventListener('input', function() {
+            document.documentElement.style.setProperty('--border-color', this.value);
+        });
 
         // Initialize with default theme
         applyTheme('default');
